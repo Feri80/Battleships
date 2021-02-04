@@ -1,6 +1,6 @@
 //               In The Name Of God
 //                   BattleShips
-//    Fundamentals Of Programming Fianl Project
+//    Fundamentals Of Programming Final Project
 //             Created By Farhad Aman
 //                   Winter 2021
 #include <stdio.h>
