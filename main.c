@@ -69,6 +69,12 @@ void create_settings()
 void load_settings()
 {
     FILE *fin=fopen("Resources\\settings.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\settings.bin \n");
+        system("pause");
+        exit(0);
+    }
     fread(&map_size,sizeof(int),1,fin);
     fread(&user_count,sizeof(int),1,fin);
     fclose(fin);
@@ -107,7 +113,16 @@ void show_settings()
         if(x==1)
         {
             fflush(stdin);
-            printf("Your Current Map Size Is : %d \nPlease Enter New Map Size (10 - 30) : ");
+            int new_size;
+            do
+            {
+                printf("Your Current Map Size Is : %d \nPlease Enter New Map Size (10 - 30) : ",map_size);
+                fflush(stdin);
+                scanf("%d",&new_size);
+            }while(new_size>30 || new_size<10);
+            map_size=new_size;
+            create_settings();
+            printf("Map Size Successfully Changed To : %d \n",map_size);
         }
         else if(x==2)
         {
@@ -178,6 +193,6 @@ void show_mainmenu()
 
 int main()
 {
-    
+    load_settings();
     //show_mainmenu();
 }
