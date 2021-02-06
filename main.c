@@ -23,12 +23,14 @@ const double pi=3.14159265359;
 const int max_name_size=50;
 const int max_map_size=30;
 int map_size=10;
+int user_count=0;
 
 struct player
 {
     char name[max_name_size];
     char visible_map[max_map_size][max_map_size];
     int hidden_map[max_map_size][max_map_size];
+    bool is_special;
 };
 typedef struct player player;
 
@@ -37,12 +39,11 @@ struct ship
     int id;
     int x1;
     int y1;
-    int x1;
-    int y1;
+    int x2;
+    int y2;
     int sz;
     int cur;
     struct ship *next;
-    
 };
 typedef struct ship ship;
 
@@ -57,7 +58,21 @@ struct game_info
 };
 typedef struct game_info game_info;
 
+void create_settings()
+{
+    FILE *fout=fopen("settings.bin","wb");
+    fwrite(&map_size,sizeof(int),1,fout);
+    fwrite(&user_count,sizeof(int),1,fout);
+    fclose(fout);
+}
 
+void load_settings()
+{
+    FILE *fin=fopen("settings.bin","rb");
+    fread(&map_size,sizeof(int),1,fin);
+    fread(&user_count,sizeof(int),1,fin);
+    fclose(fin);
+}
 
 void show_menu1()
 {
@@ -92,7 +107,7 @@ void show_settings()
         if(x==1)
         {
             fflush(stdin);
-            printf("Your Current Map Size Is : %d \nPlease Enter New Map Size (10 - 30) : ")
+            printf("Your Current Map Size Is : %d \nPlease Enter New Map Size (10 - 30) : ");
         }
         else if(x==2)
         {
@@ -110,7 +125,7 @@ void show_settings()
 
 void show_menu6()
 {
-    show_scoreboard();
+    //show_scoreboard();
 }
 
 void show_mainmenu()
@@ -163,5 +178,6 @@ void show_mainmenu()
 
 int main()
 {
-    show_mainmenu();
+
+    //show_mainmenu();
 }
