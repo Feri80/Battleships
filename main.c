@@ -21,15 +21,15 @@ const double eps=1e-7;
 const double pi=3.14159265359;
 
 const int max_name_size=50;
-const int max_map_size=30;
-int map_size=10;
+const int map_size=10;
 int user_count=0;
 
 struct player
 {
     char name[max_name_size];
-    char visible_map[max_map_size][max_map_size];
-    int hidden_map[max_map_size][max_map_size];
+    int score;
+    char visible_map[map_size][map_size];
+    int hidden_map[map_size][map_size];
     bool is_special;
 };
 typedef struct player player;
@@ -47,8 +47,6 @@ struct ship
 };
 typedef struct ship ship;
 
-
-
 struct game_info
 {
     player player1;
@@ -61,7 +59,6 @@ typedef struct game_info game_info;
 void create_settings()
 {
     FILE *fout=fopen("Resources\\settings.bin","wb");
-    fwrite(&map_size,sizeof(int),1,fout);
     fwrite(&user_count,sizeof(int),1,fout);
     fclose(fout);
 }
@@ -75,9 +72,13 @@ void load_settings()
         system("pause");
         exit(0);
     }
-    fread(&map_size,sizeof(int),1,fin);
     fread(&user_count,sizeof(int),1,fin);
     fclose(fin);
+}
+
+void show_map(player *cur_player)
+{
+
 }
 
 void show_menu1()
@@ -97,44 +98,6 @@ void show_menu3()
 
 void show_menu4()
 {
-    
-}
-
-void show_settings()
-{
-    fflush(stdin);
-    printf("\t\tSETTINGS\n------------------------------\n");
-    int x;
-    do
-    {
-        printf("1) Map Size \n2) Back To Main Menu");
-        fflush(stdin);
-        scanf("%d",&x);
-        if(x==1)
-        {
-            fflush(stdin);
-            int new_size;
-            do
-            {
-                printf("Your Current Map Size Is : %d \nPlease Enter New Map Size (10 - 30) : ",map_size);
-                fflush(stdin);
-                scanf("%d",&new_size);
-            }while(new_size>30 || new_size<10);
-            map_size=new_size;
-            create_settings();
-            printf("Map Size Successfully Changed To : %d \n",map_size);
-        }
-        else if(x==2)
-        {
-            fflush(stdin);
-            return;
-        }
-        else
-        {
-            fflush(stdin);
-            continue;
-        }
-    } while (x!=2);
     
 }
 
@@ -172,7 +135,6 @@ void show_mainmenu()
         else if(x==5)
         {
             fflush(stdin);
-            show_settings();
         }
         else if(x==6)
         {
