@@ -60,7 +60,7 @@ typedef struct game_info game_info;
 
 void create_settings()
 {
-    FILE *fout=fopen("settings.bin","wb");
+    FILE *fout=fopen("Resources\\settings.bin","wb");
     fwrite(&map_size,sizeof(int),1,fout);
     fwrite(&user_count,sizeof(int),1,fout);
     fclose(fout);
@@ -68,7 +68,7 @@ void create_settings()
 
 void load_settings()
 {
-    FILE *fin=fopen("settings.bin","rb");
+    FILE *fin=fopen("Resources\\settings.bin","rb");
     fread(&map_size,sizeof(int),1,fin);
     fread(&user_count,sizeof(int),1,fin);
     fclose(fin);
@@ -178,6 +178,6 @@ void show_mainmenu()
 
 int main()
 {
-
+    
     //show_mainmenu();
 }
