@@ -76,7 +76,7 @@ void load_settings()
     fclose(fin);
 }
 
-void show_map(player *vis_player)
+void show_visible_map(player *vis_player)
 {
     for(int i=0;i<10;i++)
     {
@@ -89,6 +89,28 @@ void show_map(player *vis_player)
         for(int j=0;j<10;j++)
         {
             printf("%c | ",vis_player->visible_map[i][j]);
+        }
+        printf("\n");
+        for(int j=0;j<10;j++)
+        {
+            printf(" ---");
+        }
+    }
+}
+
+void show_hidden_map(player *vis_player)
+{
+    for(int i=0;i<10;i++)
+    {
+        printf(" ---");
+    }
+    for(int i=0;i<10;i++)
+    {
+        printf("\n");
+        printf("| ");
+        for(int j=0;j<10;j++)
+        {
+            printf("%d | ",vis_player->hidden_map[i][j]);
         }
         printf("\n");
         for(int j=0;j<10;j++)
