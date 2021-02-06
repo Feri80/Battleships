@@ -22,7 +22,7 @@ const double pi=3.14159265359;
 
 const int max_name_size=50;
 const int map_size=10;
-int user_count=0;
+int user_count=1;
 
 struct player
 {
@@ -33,6 +33,12 @@ struct player
     bool is_special;
 };
 typedef struct player player;
+
+struct username
+{
+    char name[max_name_size];
+    int score;
+};
 
 struct ship
 {
@@ -46,6 +52,8 @@ struct ship
     struct ship *next;
 };
 typedef struct ship ship;
+
+
 
 struct game_info
 {
@@ -110,7 +118,18 @@ void show_hidden_map(player *vis_player)
         printf("| ");
         for(int j=0;j<10;j++)
         {
-            printf("%d | ",vis_player->hidden_map[i][j]);
+            if(vis_player->hidden_map[i][j]==-1)
+            {
+                printf("  | ",vis_player->hidden_map[i][j]);
+            }   
+            else if(vis_player->hidden_map[i][j]==-2)
+            {
+                printf("L | ",vis_player->hidden_map[i][j]);
+            }
+            else
+            {
+                printf("%d | ",vis_player->hidden_map[i][j]);
+            }
         }
         printf("\n");
         for(int j=0;j<10;j++)
@@ -118,6 +137,71 @@ void show_hidden_map(player *vis_player)
             printf(" ---");
         }
     }
+}
+
+void show_names()
+{
+
+}
+
+void use_existing_name(player *vis_player)
+{
+    fflush(stdin);
+    show_names();
+    int x;
+    do
+    {
+        printf("Please Choose A Username : ");
+        fflush(stdin);
+        scanf("%d",&x);
+    }while(x<1 || x>(user_count-1));
+    
+}
+
+void use_new_name(player *vis_player)
+{
+
+}
+
+void get_name(player *vis_player)
+{
+    fflush(stdin);
+    int x;
+    do
+    {
+        printf("1) Choose An Existing User \n2) Add A New User \n");
+        fflush(stdin);
+        scanf("%d",&x);
+        if(x==1)
+        {
+
+        }
+        else if(x==2)
+        {
+
+        }
+        else
+        {
+
+        }
+    }while()
+}
+
+void init_map(player *vis_player)
+{
+    for(int i=0;i<10;i++)
+    {
+        for(int j=0;j<10;j++)
+        {
+            vis_player->visible_map[i][j]=' ';
+            vis_player->hidden_map[i][j]=-1;
+        }
+    }
+}
+
+void init_player(player *vis_player)
+{
+
 }
 
 void show_menu1()
@@ -142,7 +226,7 @@ void show_menu4()
 
 void show_menu6()
 {
-    //show_scoreboard();
+
 }
 
 void show_mainmenu()
@@ -194,6 +278,5 @@ void show_mainmenu()
 
 int main()
 {
-    load_settings();
-    //show_mainmenu();
+
 }
