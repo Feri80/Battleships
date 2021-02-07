@@ -22,7 +22,7 @@ const double pi=3.14159265359;
 
 const int max_name_size=50;
 const int map_size=10;
-int user_count=1;
+int user_count=3;
 
 struct player
 {
@@ -155,7 +155,7 @@ void show_names()
         fread(&u,sizeof(username),1,fin);
         if(i!=0)
         {
-            printf("%d) %s \n",i,u.name);
+            printf("%d) %s %d \n",i,u.name,u.score);
         }
     }
     fclose(fin);
@@ -166,9 +166,22 @@ void add_name(char *name)
     FILE *fout=fopen("Resources\\usernames.bin","ab");
     username new_username;
     strcpy(new_username.name,name);
-    new_username.score=0;;
+    new_username.score=0;
     fwrite(&new_username,sizeof(username),1,fout);
     fclose(fout);
+}
+
+void add_score(int id,int x)
+{
+    FILE *fin=fopen("Resources\\usernames.bin","rb");
+    username new_username;
+    fseek(fin,id*sizeof(username),SEEK_SET);
+    fread(&new_username,sizeof(username),1,fin);
+    fclose(fin);
+    new_username.score+=x;
+    FILE *fout=fopen("Resources\\usernames.bin","r+b");
+    fseek(fin,id*sizeof(username),SEEK_SET);
+    fwrite(&new_username,sizeof(username),1,fin);
 }
 
 void use_existing_name(player *vis_player)
