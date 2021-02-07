@@ -351,6 +351,73 @@ void init_map(player *vis_player)
     }
 }
 
+bool check_valid_map(player *vis_player,int sz,int x1,int x2,int y1,int y2)
+{
+    if( (fabs(x1-x2)==(sz-1) && y1==y2) || (fabs(y1-y2)==(sz-1) && x1==x2) )
+    {
+        if(x1<0 || x1>9 || x2<0 || x2>9 || y1<0 || y1>9 || y2<0 || y2>9)
+        {
+            return 0;
+        }
+        else
+        {
+            if(x1==x2)
+            {
+                int l=fmin(y1,y2);
+                int r=famx(y1,y2);
+                for(int i=l;i<=r;i++)
+                {
+                    if(vis_player->hidden_map[x1][i]!=-1)
+                    {
+                        return 0;
+                    }
+                }
+                return 1;
+            }
+            else if(y1==y2)
+            {
+                int l=fmin(x1,x2);
+                int r=famx(x1,x2);
+                for(int i=l;i<=r;i++)
+                {
+                    if(vis_player->hidden_map[i][y1]!=-1)
+                    {
+                        return 0;
+                    }
+                }
+                return 1;
+            }
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
+{
+    if(x1==x2)
+    {
+        int l=fmin(y1,y2);
+        int r=famx(y1,y2);
+        for(int i=l;i<=r;i++)
+        {
+            vis_player->hidden_map[x1][i]=id;
+            
+        }
+    }
+    else if(y1==y2)
+    {
+        int l=fmin(x1,x2);
+        int r=famx(x1,x2);
+        for(int i=l;i<=r;i++)
+        {
+            vis_player->hidden_map[i][y1]=id;
+        }
+    }
+}
+
 int make_random_map(player *vis_player)
 {
 
@@ -359,14 +426,187 @@ int make_random_map(player *vis_player)
 int make_map(player *vis_player)
 {
     init_map(vis_player);
+    int id=0;
+    //-----------------------------------------------------------------------------------------
+    // 1)
     show_hidden_map(vis_player);
-    printf("\nPlaese Enter Your Size 5 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
     fflush(stdin);
     int x1,x2,y1,y2;
-    scanf("%d",&x1);
-    scanf("%d",&y1);
-    scanf("%d",&x2);
-    scanf("%d",&y2);
+    do
+    {
+        printf("\nPlaese Enter Your Size 5 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,5,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 2)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your First Size 3 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,3,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 3)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your Second Size 3 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,3,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 4)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your First Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 5)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your Second Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 6)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your Third Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 7)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your First Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 8)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your Second Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 9)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your Third Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    //-----------------------------------------------------------------------------------------
+    // 10)
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    id++;
+    do
+    {
+        printf("\nPlaese Enter Your Fourth Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        fflush(stdin);
+        scanf("%d",&x1);
+        scanf("%d",&y1);
+        scanf("%d",&x2);
+        scanf("%d",&y2);
+    }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
+    put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    system("pause");
+    system("cls");
+    fflush(stdin);
 }
 
 void get_map(player *vis_player)
