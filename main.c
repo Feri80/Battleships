@@ -943,9 +943,62 @@ void init_player(player *vis_player)
     fflush(stdin);
 }
 
+bool check_valid_target(player *op_player,int x,int y)
+{
+    if(x==-2 && y==-2)
+    {
+        return 0;
+    }
+}
+
 bool turn(player *player1,player *player2,int t)
 {
+    fflush(stdin);
+    player op_player;
+    if(t==1)
+    {
+        op_player=player2;
+        show_visible_map(player2);
+        fflush(stdin);
+    }
+    if(t==2)
+    {
+        op_player=player1;
+        show_visible_map(player1);
+        fflush(stdin);
+    }
+    int x,y;
+    do
+    {
+        printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game\n)");
+        fflush(stdin);
+        scanf("%d",&x);
+        scanf("%d",&y);
+        fflush(stdin);
+        if(x==-1 && y==-1)
+        {
+            //break
+        }
+        else if(x==-2 && y==-2)
+        {
 
+        }
+        else if(x>=0 && x<10 && y>=0 && y<10);
+        {
+            if(check_valid_target(op_player,x,y)==0)
+            {
+                fflush(stdin);
+                continue;
+            }
+            //break
+
+        }
+        else
+        {
+            fflush(stdin);
+            continue;
+        }
+    }while(1);
 }
 
 void play(player *player1,player *player2,int t)
