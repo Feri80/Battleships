@@ -22,7 +22,7 @@ const double pi=3.14159265359;
 
 #define max_name_size 50
 #define map_size 10
-int user_count=5;
+int user_count=1;
 
 struct player
 {
@@ -291,6 +291,8 @@ void add_name(char *name)
     strcpy(new_username.name,name);
     new_username.score=0;
     fwrite(&new_username,sizeof(username),1,fout);
+    user_count++;
+    create_settings();
     fclose(fout);
 }
 
@@ -351,6 +353,7 @@ int use_new_name(player *vis_player)
         strcpy(vis_player->name,new_name);
         vis_player->score=0;
         fflush(stdin);
+
         return 1;
     }
     else
@@ -473,6 +476,71 @@ void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
             vis_player->hidden_map[i][y1]=id;
         }
     }
+    for(int i=0;i<10;i++)
+    {
+        for(int j=0;j<10;j++)
+        {
+            if(vis_player->hidden_map[i][j]>=0)
+            {
+                if(vis_player->hidden_map[i+1][j]==-1)
+                {
+                    if(i+1>=0 && i+1<10 && j>=0 && j<10)
+                    {
+                        vis_player->hidden_map[i+1][j]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i-1][j]==-1)
+                {
+                    if(i-1>=0 && i-1<10 && j>=0 && j<10)
+                    {
+                        vis_player->hidden_map[i-1][j]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i][j+1]==-1)
+                {
+                    if(i>=0 && i<10 && j+1>=0 && j+1<10)
+                    {
+                        vis_player->hidden_map[i][j+1]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i][j-1]==-1)
+                {
+                    if(i>=0 && i<10 && j-1>=0 && j-1<10)
+                    {
+                        vis_player->hidden_map[i][j-1]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i+1][j+1]==-1)
+                {
+                    if(i+1>=0 && i+1<10 && j+1>=0 && j+1<10)
+                    {
+                        vis_player->hidden_map[i+1][j+1]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i+1][j-1]==-1)
+                {
+                    if(i+1>=0 && i+1<10 && j-1>=0 && j-1<10)
+                    {
+                        vis_player->hidden_map[i+1][j-1]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i-1][j+1]==-1)
+                {
+                    if(i-1>=0 && i-1<10 && j+1>=0 && j+1<10)
+                    {
+                        vis_player->hidden_map[i-1][j+1]=-2;
+                    }
+                }
+                if(vis_player->hidden_map[i-1][j-1]==-1)
+                {
+                    if(i-1>=0 && i-1<10 && j-1>=0 && j-1<10)
+                    {
+                        vis_player->hidden_map[i-1][j-1]=-2;
+                    }
+                }
+            }
+        }
+    }
 }
 
 int make_random_map(player *vis_player)
@@ -491,12 +559,16 @@ bool make_map(player *vis_player)
     int x1,x2,y1,y2;
     do
     {
-        printf("\nPlaese Enter Your Size 5 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Size 5 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,5,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -516,12 +588,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your First Size 3 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your First Size 3 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,3,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -541,12 +617,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Second Size 3 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Second Size 3 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,3,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -566,12 +646,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your First Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your First Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -591,12 +675,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Second Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Second Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -616,12 +704,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Third Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Third Size 2 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -641,12 +733,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your First Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your First Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -666,12 +762,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Second Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Second Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -691,12 +791,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Third Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Third Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -716,12 +820,16 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Fourth Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+        printf("\nPlaese Enter Your Fourth Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
         scanf("%d",&x2);
         scanf("%d",&y2);
+        if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
+        {
+            return 0;
+        }
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
     total_ships[id].x1=x1;
@@ -803,7 +911,24 @@ void get_map(player *vis_player)
     fflush(stdin);
 }
 
-
+void make_lists(int player_number)
+{
+    if(player_number==1)
+    {
+        for(int i=0;i<10;i++)
+        {
+            add_end(ships1,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+        }
+    }
+    else
+    {
+        for(int i=0;i<10;i++)
+        {
+            add_end(ships2,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+        }
+    }
+    
+}
 
 void init_player(player *vis_player)
 {
@@ -824,12 +949,19 @@ void play_with_friend()
     fflush(stdin);
     player player1;
     player player2;
+
     init_player(&player1);
-    fflush(stdin);
-    init_player(&player2);
-    fflush(stdin);
     ship *ships1=NULL;
+    fflush(stdin);
+    make_lists(1);
+    fflush(stdin);
+
+    init_player(&player2);
     ship *ships2=NULL;
+    fflush(stdin);
+    make_lists(2);
+    fflush(stdin);
+    
 
 }
 
@@ -903,13 +1035,6 @@ void show_mainmenu()
 
 int main()
 {
-    /*player a;
-    for(int i=0;i<10;i++)
-    {
-        for(int j=0;j<10;j++)
-        {
-            a.hidden_map[i][j]=-2;
-        }
-    }
-    show_hidden_map(&a);*/
+    load_settings();
+    play_with_friend();
 }
