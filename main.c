@@ -61,7 +61,7 @@ ship *ships2=NULL;
 int ship_count1=10;
 int ship_count2=10;
 
-void add_end(ship *ships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
+void add_end(ship **pships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
 {
     ship *new_ship=(ship*)malloc(sizeof(ship));
     new_ship->id=id;
@@ -73,32 +73,32 @@ void add_end(ship *ships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
     new_ship->cur=new_ship->sz;
     new_ship->next=NULL;
     ship *current;
-    if(ships==NULL)
+    if(*pships==NULL)
     {
-        ships=new_ship;
+        *pships=new_ship;
     }
     else
     {
-        for(current=ships;current->next!=NULL;current=current->next);
+        for(current=*pships;current->next!=NULL;current=current->next);
         current->next=new_ship;
     }
 }
 
-bool delete_ship(ship *ships,int id) 
+bool delete_ship(ship **pships,int id) 
 {
-    if(ships==NULL)
+    if(*pships==NULL)
     {
         return 0;
     }
-    if(ships->id==id)
+    if((*pships)->id==id)
     {
-        ship *new_ships=ships->next;
-        free(ships);
-        ships=new_ships;
+        ship *new_ships=(*pships)->next;
+        free(*pships);
+        *pships=new_ships;
         return 1;
     }
     ship *current=NULL;
-    for(current=ships;current->next!=NULL;current=current->next)
+    for(current=*pships;current->next!=NULL;current=current->next)
     {
         if(current->next->id==id)
         {
@@ -232,7 +232,6 @@ int search_name(char *name)
     fclose(fin);
     return -1;
 }
-
 
 int scoreboard_cmp(const void *a,const void *b)
 {
@@ -884,6 +883,7 @@ void get_map(player *vis_player)
             fflush(stdin);
             while(make_map(vis_player)==0)
             {
+                system("cls");
                 fflush(stdin);
             }
             fflush(stdin);
@@ -893,6 +893,7 @@ void get_map(player *vis_player)
             fflush(stdin);
             while(make_random_map(vis_player)==0)
             {
+                system("cls");
                 fflush(stdin);
             }
             fflush(stdin);
@@ -917,14 +918,14 @@ void make_lists(int player_number)
     {
         for(int i=0;i<10;i++)
         {
-            add_end(ships1,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+           add_end(&ships1,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
         }
     }
     else
     {
         for(int i=0;i<10;i++)
         {
-            add_end(ships2,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+            add_end(&ships2,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
         }
     }
     
@@ -951,13 +952,11 @@ void play_with_friend()
     player player2;
 
     init_player(&player1);
-    ship *ships1=NULL;
     fflush(stdin);
     make_lists(1);
     fflush(stdin);
 
     init_player(&player2);
-    ship *ships2=NULL;
     fflush(stdin);
     make_lists(2);
     fflush(stdin);
