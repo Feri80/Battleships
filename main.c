@@ -423,7 +423,7 @@ int make_random_map(player *vis_player)
 
 }
 
-int make_map(player *vis_player)
+bool make_map(player *vis_player)
 {
     init_map(vis_player);
     int id=0;
@@ -607,6 +607,29 @@ int make_map(player *vis_player)
     system("pause");
     system("cls");
     fflush(stdin);
+
+    show_hidden_map(vis_player);
+    fflush(stdin);
+    char c;
+    do
+    {
+        printf("\nAre You Accept This Map ? (y/n) / (Y/N)")
+        fflush(stdin);
+        scanf("%c",&c);
+        if(c=='Y' || c=='y')
+        {
+            return 1;
+        }
+        else if(c=='N' || c=='n')
+        {
+            return 0;
+        }
+        else
+        {
+            fflush(stdin);
+            continue;
+        }
+    }while(c!='Y' && c!='N' && c!='y' && c!='n');
 }
 
 void get_map(player *vis_player)
