@@ -54,8 +54,6 @@ struct ship
 };
 typedef struct ship ship;
 
-
-
 struct game_info
 {
     player player1;
@@ -209,7 +207,7 @@ void show_names()
         fread(&u,sizeof(username),1,fin);
         if(i!=0)
         {
-            printf("%d) %s %d \n",i,u.name,u.score);
+            printf("%d) %s\n",i,u.name);
         }
     }
     fclose(fin);
@@ -255,15 +253,34 @@ void use_existing_name(player *vis_player)
         fflush(stdin);
         scanf("%d",&x);
     }while(x<1 || x>(user_count-1));
-    
+    FILE *fin=fopen("Resources\\usernames.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\usernames.bin \n");
+        system("pause");
+        exit(0);
+    }
+    fseek(fin,x*sizeof(username),SEEK_SET);
+    username new_username;
+    fread(&new_username,sizeof(username),1,fin);
+    strcpy(vis_player->name,new_username.name);
+    vis_player->score=new_username.score;
+    fclose(fin);
 }
 
 void use_new_name(player *vis_player)
 {
-
+    char new_name[max_name_size];
+    printf("Please Enter Your New Name (Up To 50 Characters) : ");
+    fflush(stdin);
+    gets(new_name);
+    add_name(new_name);
+    strcpy(vis_player->name,new_name);
+    vis_player->score=0;
+    fflush(stdin);
 }
 
-/*void get_name(player *vis_player)
+void get_name(player *vis_player)
 {
     fflush(stdin);
     int x;
@@ -274,18 +291,25 @@ void use_new_name(player *vis_player)
         scanf("%d",&x);
         if(x==1)
         {
-
+            fflush(stdin);
+            use_existing_name(vis_player);
+            fflush(stdin);
+            break;
         }
         else if(x==2)
         {
-
+            fflush(stdin);
+            use_new_name(vis_player);
+            fflush(stdin);
+            break;
         }
         else
-        {
-
+        {   
+            fflush(stdin);
+            continue;
         }
-    }while()
-}*/
+    }while(x<1 || x>2);
+}
 
 void init_map(player *vis_player)
 {
@@ -304,12 +328,12 @@ void init_player(player *vis_player)
 
 }
 
-void show_menu1()
+void play_with_friend()
 {
     
 }
 
-void show_menu2()
+void player_with_cpu()
 {
     
 }
@@ -324,10 +348,6 @@ void show_menu4()
     
 }
 
-void show_menu6()
-{
-
-}
 
 void show_mainmenu()
 {
@@ -380,5 +400,5 @@ void show_mainmenu()
 
 int main()
 {
-    
+
 }
