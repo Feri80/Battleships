@@ -85,6 +85,12 @@ void load_settings()
 
 void show_visible_map(player *vis_player)
 {
+    printf("\n  ");
+    for(int i=0;i<10;i++)
+    {
+        printf("  %d ",i);
+    }
+    printf("\n  ");
     for(int i=0;i<10;i++)
     {
         printf(" ---");
@@ -92,12 +98,13 @@ void show_visible_map(player *vis_player)
     for(int i=0;i<10;i++)
     {
         printf("\n");
+        printf("%d ",i);
         printf("| ");
         for(int j=0;j<10;j++)
         {
             printf("%c | ",vis_player->visible_map[i][j]);
         }
-        printf("\n");
+        printf("\n  ");
         for(int j=0;j<10;j++)
         {
             printf(" ---");
@@ -107,6 +114,12 @@ void show_visible_map(player *vis_player)
 
 void show_hidden_map(player *vis_player)
 {
+    printf("\n  ");
+    for(int i=0;i<10;i++)
+    {
+        printf("  %d ",i);
+    }
+    printf("\n  ");
     for(int i=0;i<10;i++)
     {
         printf(" ---");
@@ -114,6 +127,7 @@ void show_hidden_map(player *vis_player)
     for(int i=0;i<10;i++)
     {
         printf("\n");
+        printf("%d ",i);
         printf("| ");
         for(int j=0;j<10;j++)
         {
@@ -130,7 +144,7 @@ void show_hidden_map(player *vis_player)
                 printf("%d | ",vis_player->hidden_map[i][j]);
             }
         }
-        printf("\n");
+        printf("\n  ");
         for(int j=0;j<10;j++)
         {
             printf(" ---");
@@ -309,7 +323,7 @@ void get_name(player *vis_player)
         else if(x==2)
         {
             fflush(stdin);
-            bool flag=0
+            bool flag=0;
             flag=use_new_name(vis_player);
             fflush(stdin);
             if(flag)
@@ -344,7 +358,8 @@ int make_random_map(player *vis_player)
 
 int make_map(player *vis_player)
 {
-
+    init_map(vis_player);
+    
 }
 
 void get_map(player *vis_player)
@@ -466,5 +481,13 @@ void show_mainmenu()
 
 int main()
 {
-
+    /*player a;
+    for(int i=0;i<10;i++)
+    {
+        for(int j=0;j<10;j++)
+        {
+            a.hidden_map[i][j]=-2;
+        }
+    }
+    show_hidden_map(&a);*/
 }
