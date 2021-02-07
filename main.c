@@ -54,14 +54,62 @@ struct ship
 };
 typedef struct ship ship;
 
-struct game_info
+ship total_ships[10];
+ship *ships1=NULL;
+ship *ships2=NULL;
+
+int ship_count1=10;
+int ship_count2=10;
+
+void add_end(ship *ships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
 {
-    player player1;
-    player player2;
-    ship *ships1;
-    ship *ships2;
-};
-typedef struct game_info game_info;
+    ship *new_ship=(ship*)malloc(sizeof(ship));
+    new_ship->id=id;
+    new_ship->x1=x1;
+    new_ship->x2=x2;
+    new_ship->y1=y1;
+    new_ship->y2=y2;
+    new_ship->sz=sz;
+    new_ship->cur=new_ship->sz;
+    new_ship->next=NULL;
+    ship *current;
+    if(ships==NULL)
+    {
+        ships=new_ship;
+    }
+    else
+    {
+        for(current=ships;current->next!=NULL;current=current->next);
+        current->next=new_ship;
+    }
+}
+
+bool delete_ship(ship *ships,int id) 
+{
+    if(ships==NULL)
+    {
+        return 0;
+    }
+    if(ships->id==id)
+    {
+        ship *new_ships=ships->next;
+        free(ships);
+        ships=new_ships;
+        return 1;
+    }
+    ship *current=NULL;
+    for(current=ships;current->next!=NULL;current=current->next)
+    {
+        if(current->next->id==id)
+        {
+            ship *new_next=current->next->next;
+            free(current->next);
+            current->next=new_next;
+            return 1;
+        }
+    }
+    return 0;
+}
 
 void create_settings()
 {
@@ -364,7 +412,7 @@ bool check_valid_map(player *vis_player,int sz,int x1,int x2,int y1,int y2)
             if(x1==x2)
             {
                 int l=fmin(y1,y2);
-                int r=famx(y1,y2);
+                int r=fmax(y1,y2);
                 for(int i=l;i<=r;i++)
                 {
                     if(vis_player->hidden_map[x1][i]!=-1)
@@ -377,7 +425,7 @@ bool check_valid_map(player *vis_player,int sz,int x1,int x2,int y1,int y2)
             else if(y1==y2)
             {
                 int l=fmin(x1,x2);
-                int r=famx(x1,x2);
+                int r=fmax(x1,x2);
                 for(int i=l;i<=r;i++)
                 {
                     if(vis_player->hidden_map[i][y1]!=-1)
@@ -400,7 +448,7 @@ void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
     if(x1==x2)
     {
         int l=fmin(y1,y2);
-        int r=famx(y1,y2);
+        int r=fmax(y1,y2);
         for(int i=l;i<=r;i++)
         {
             vis_player->hidden_map[x1][i]=id;
@@ -410,7 +458,7 @@ void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
     else if(y1==y2)
     {
         int l=fmin(x1,x2);
-        int r=famx(x1,x2);
+        int r=fmax(x1,x2);
         for(int i=l;i<=r;i++)
         {
             vis_player->hidden_map[i][y1]=id;
@@ -442,13 +490,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,5,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=5;
+    total_ships[id].cur=5;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 2)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -460,13 +515,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,3,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=3;
+    total_ships[id].cur=3;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 3)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -478,13 +540,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,3,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=3;
+    total_ships[id].cur=3;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 4)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -496,13 +565,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=2;
+    total_ships[id].cur=2;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 5)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -514,13 +590,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=2;
+    total_ships[id].cur=2;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 6)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -532,13 +615,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,2,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=2;
+    total_ships[id].cur=2;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 7)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -550,13 +640,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=1;
+    total_ships[id].cur=1;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 8)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -568,13 +665,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=1;
+    total_ships[id].cur=1;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 9)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -586,13 +690,20 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=1;
+    total_ships[id].cur=1;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     //-----------------------------------------------------------------------------------------
     // 10)
     show_hidden_map(vis_player);
     fflush(stdin);
-    int x1,x2,y1,y2;
     id++;
     do
     {
@@ -604,6 +715,14 @@ bool make_map(player *vis_player)
         scanf("%d",&y2);
     }while(check_valid_map(vis_player,1,x1,x2,y1,y2)==0);
     put_selected_ship(vis_player,id,x1,x2,y1,y2);
+    total_ships[id].x1=x1;
+    total_ships[id].x2=x2;
+    total_ships[id].y1=y1;
+    total_ships[id].y2=y2;
+    total_ships[id].id=id;
+    total_ships[id].sz=1;
+    total_ships[id].cur=1;
+    total_ships[id].next=NULL;
     system("pause");
     system("cls");
     fflush(stdin);
@@ -613,15 +732,17 @@ bool make_map(player *vis_player)
     char c;
     do
     {
-        printf("\nAre You Accept This Map ? (y/n) / (Y/N)")
+        printf("\nAre You Accept This Map ? (y/n) / (Y/N)");
         fflush(stdin);
         scanf("%c",&c);
         if(c=='Y' || c=='y')
         {
+            fflush(stdin);
             return 1;
         }
         else if(c=='N' || c=='n')
         {
+            fflush(stdin);
             return 0;
         }
         else
@@ -665,28 +786,50 @@ void get_map(player *vis_player)
             continue;
         }
     }while(x<1 || x>2);
+    system("cls");
+    fflush(stdin);
+    printf("Your Map Successfully Created \n");
+    system("pause");
+    system("cls");
+    fflush(stdin);
 }
+
+
 
 void init_player(player *vis_player)
 {
     fflush(stdin);
     get_name(vis_player);
+    fflush(stdin);
     get_map(vis_player);
+    fflush(stdin);
+}
+
+void play()
+{
+    
 }
 
 void play_with_friend()
 {
+    fflush(stdin);
     player player1;
     player player2;
     init_player(&player1);
+    fflush(stdin);
     init_player(&player2);
+    fflush(stdin);
+    ship *ships1=NULL;
+    ship *ships2=NULL;
 
 }
 
 void player_with_cpu()
 {
+    fflush(stdin);
     player player1;
     init_player(&player1);
+    fflush(stdin);
 }
 
 void show_menu3()
