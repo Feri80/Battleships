@@ -268,16 +268,26 @@ void use_existing_name(player *vis_player)
     fclose(fin);
 }
 
-void use_new_name(player *vis_player)
+int use_new_name(player *vis_player)
 {
     char new_name[max_name_size];
     printf("Please Enter Your New Name (Up To 50 Characters) : ");
     fflush(stdin);
     gets(new_name);
-    add_name(new_name);
-    strcpy(vis_player->name,new_name);
-    vis_player->score=0;
-    fflush(stdin);
+    if(search_name(new_name)==-1)
+    {
+        add_name(new_name);
+        strcpy(vis_player->name,new_name);
+        vis_player->score=0;
+        fflush(stdin);
+        return 1;
+    }
+    else
+    {
+        printf("This Username Is Already In Use \n");
+        system("pause");
+        return 0;
+    }
 }
 
 void get_name(player *vis_player)
@@ -299,16 +309,20 @@ void get_name(player *vis_player)
         else if(x==2)
         {
             fflush(stdin);
-            use_new_name(vis_player);
+            bool flag=0
+            flag=use_new_name(vis_player);
             fflush(stdin);
-            break;
+            if(flag)
+            {
+                break;
+            }
         }
         else
         {   
             fflush(stdin);
             continue;
         }
-    }while(x<1 || x>2);
+    }while(1);
 }
 
 void init_map(player *vis_player)
@@ -323,19 +337,71 @@ void init_map(player *vis_player)
     }
 }
 
-void init_player(player *vis_player)
+int make_random_map(player *vis_player)
 {
 
+}
+
+int make_map(player *vis_player)
+{
+
+}
+
+void get_map(player *vis_player)
+{
+    fflush(stdin);
+    int x;
+    do
+    {
+        printf("1) Make Your Own Map \n2) Choose A Random Map \n");
+        fflush(stdin);
+        scanf("%d",&x);
+        if(x==1)
+        {
+            fflush(stdin);
+            while(make_map(vis_player)==0)
+            {
+                fflush(stdin);
+            }
+            fflush(stdin);
+        }
+        else if(x==2)
+        {
+            fflush(stdin);
+            while(make_random_map(vis_player)==0)
+            {
+                fflush(stdin);
+            }
+            fflush(stdin);
+        }
+        else
+        {
+            fflush(stdin);
+            continue;
+        }
+    }while(x<1 || x>2);
+}
+
+void init_player(player *vis_player)
+{
+    fflush(stdin);
+    get_name(vis_player);
+    get_map(vis_player);
 }
 
 void play_with_friend()
 {
-    
+    player player1;
+    player player2;
+    init_player(&player1);
+    init_player(&player2);
+
 }
 
 void player_with_cpu()
 {
-    
+    player player1;
+    init_player(&player1);
 }
 
 void show_menu3()
@@ -361,7 +427,7 @@ void show_mainmenu()
         scanf("%d",&x);
         if(x==1)
         {
-            
+            play_with_friend();
         }   
         else if(x==2)
         {
