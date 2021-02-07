@@ -39,6 +39,7 @@ struct username
     char name[max_name_size];
     int score;
 };
+typedef struct username username;
 
 struct ship
 {
@@ -141,7 +142,33 @@ void show_hidden_map(player *vis_player)
 
 void show_names()
 {
+    FILE *fin=fopen("Resources\\usernames.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\usernames.bin \n");
+        system("pause");
+        exit(0);
+    }
+    for(int i=0;i<user_count;i++)
+    {
+        username u;
+        fread(&u,sizeof(username),1,fin);
+        if(i!=0)
+        {
+            printf("%d) %s \n",i,u.name);
+        }
+    }
+    fclose(fin);
+}
 
+void add_name(char *name)
+{
+    FILE *fout=fopen("Resources\\usernames.bin","ab");
+    username new_username;
+    strcpy(new_username.name,name);
+    new_username.score=0;;
+    fwrite(&new_username,sizeof(username),1,fout);
+    fclose(fout);
 }
 
 void use_existing_name(player *vis_player)
@@ -163,7 +190,7 @@ void use_new_name(player *vis_player)
 
 }
 
-void get_name(player *vis_player)
+/*void get_name(player *vis_player)
 {
     fflush(stdin);
     int x;
@@ -185,7 +212,7 @@ void get_name(player *vis_player)
 
         }
     }while()
-}
+}*/
 
 void init_map(player *vis_player)
 {
