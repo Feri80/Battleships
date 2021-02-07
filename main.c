@@ -28,6 +28,7 @@ struct player
 {
     char name[max_name_size];
     int score;
+    int delta_score;
     char visible_map[map_size][map_size];
     int hidden_map[map_size][map_size];
     bool is_special;
@@ -337,6 +338,7 @@ void use_existing_name(player *vis_player)
     fread(&new_username,sizeof(username),1,fin);
     strcpy(vis_player->name,new_username.name);
     vis_player->score=new_username.score;
+    vis_player->delta_score=0;
     fclose(fin);
 }
 
@@ -351,6 +353,7 @@ int use_new_name(player *vis_player)
         add_name(new_name);
         strcpy(vis_player->name,new_name);
         vis_player->score=0;
+        vis_player->delta_score=0;
         fflush(stdin);
 
         return 1;
@@ -940,9 +943,40 @@ void init_player(player *vis_player)
     fflush(stdin);
 }
 
-void play()
+bool turn(player *player1,player *player2,int t)
 {
 
+}
+
+void play(player *player1,player *player2,int t)
+{
+    while(ships1!=NULL && ships2!=NULL)
+    {
+        bool sw=turn(player1,player2,t);
+        if(sw==0)
+        {
+            if(t==1)
+            {
+                t=2;
+            }
+            else
+            {
+                t=1;
+            }
+        }
+    }
+    int a=search_name(player1->name);
+    int b=search_name(player2->name);
+    if(ships2==NULL)
+    {
+        add_score(a,player1->delta_score);    
+        add_score(b,player2->delta_score/2);    
+    }
+    else
+    {
+        add_score(a,player1->delta_score/2);    
+        add_score(b,player2->delta_score);
+    }
 }
 
 void play_with_friend()
