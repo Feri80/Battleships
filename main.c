@@ -359,7 +359,14 @@ int make_random_map(player *vis_player)
 int make_map(player *vis_player)
 {
     init_map(vis_player);
-    
+    show_hidden_map(vis_player);
+    printf("\nPlaese Enter Your Size 5 Ship Coordinates (Like)  x1 y1 x2 y2 : \n");
+    fflush(stdin);
+    int x1,x2,y1,y2;
+    scanf("%d",&x1);
+    scanf("%d",&y1);
+    scanf("%d",&x2);
+    scanf("%d",&y2);
 }
 
 void get_map(player *vis_player)
