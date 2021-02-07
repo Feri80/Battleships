@@ -140,6 +140,30 @@ void show_hidden_map(player *vis_player)
     }
 }
 
+int search_name(char *name)
+{
+    FILE *fin=fopen("Resources\\usernames.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\usernames.bin \n");
+        system("pause");
+        exit(0);
+    }
+    fseek(fin,sizeof(username),SEEK_SET);
+    for(int i=1;i<user_count;i++)
+    {
+        username new_username;
+        fread(&new_username,sizeof(username),1,fin);
+        if(strcmp(name,new_username.name)==0)
+        {
+            fclose(fin);
+            return i;
+        }
+    }
+    fclose(fin);
+    return -1;
+}
+
 void show_names()
 {
     FILE *fin=fopen("Resources\\usernames.bin","rb");
@@ -174,6 +198,12 @@ void add_name(char *name)
 void add_score(int id,int x)
 {
     FILE *fin=fopen("Resources\\usernames.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\usernames.bin \n");
+        system("pause");
+        exit(0);
+    }
     username new_username;
     fseek(fin,id*sizeof(username),SEEK_SET);
     fread(&new_username,sizeof(username),1,fin);
@@ -318,5 +348,5 @@ void show_mainmenu()
 
 int main()
 {
-
+    
 }
