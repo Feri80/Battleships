@@ -22,7 +22,7 @@ const double pi=3.14159265359;
 
 const int max_name_size=50;
 const int map_size=10;
-int user_count=3;
+int user_count=5;
 
 struct player
 {
@@ -162,6 +162,36 @@ int search_name(char *name)
     }
     fclose(fin);
     return -1;
+}
+
+
+int scoreboard_cmp(const void *a,const void *b)
+{
+    return ((*(username*)b).score - (*(username*)a).score);
+}
+void show_scoreboard()
+{
+    FILE *fin=fopen("Resources\\usernames.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\usernames.bin \n");
+        system("pause");
+        exit(0);
+    }
+    fseek(fin,sizeof(username),SEEK_SET);
+    username users[user_count-1];
+    for(int i=0;i<user_count-1;i++)
+    {
+        fread(&users[i],sizeof(username),1,fin);
+    }
+    qsort(users,user_count-1,sizeof(username),scoreboard_cmp);
+    printf("\n\t\t\t\tSCORE BOARD\n--------------------------------------------------------------------------------\n");
+    for(int i=0;i<user_count-1;i++)
+    {
+        printf("%d) %-50s\t\tScore : %d \n--------------------------------------------------------------------------------\n",i+1,users[i].name,users[i].score);
+    }
+    system("pause");
+    system("cls");
 }
 
 void show_names()
@@ -306,7 +336,7 @@ void show_mainmenu()
     int x;
     do
     {
-        printf("1) Play With A Friend \n2) Play With CPU \n3) Load Game \n4) Load Last Game \n5) Settings \n6) Score Board \n7) Exit \n");
+        printf("1) Play With A Friend \n2) Play With CPU \n3) Load Game \n4) Load Last Game \n5) Play Back \n6) Score Board \n7) Exit \n");
         fflush(stdin);
         scanf("%d",&x);
         if(x==1)
@@ -331,7 +361,9 @@ void show_mainmenu()
         }
         else if(x==6)
         {
-            
+            fflush(stdin);
+            show_scoreboard();
+            fflush(stdin);
         }
         else if(x==7)
         {
