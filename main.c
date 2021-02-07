@@ -20,8 +20,8 @@ const ll inf=1000000000000000000L;
 const double eps=1e-7;
 const double pi=3.14159265359;
 
-const int max_name_size=50;
-const int map_size=10;
+#define max_name_size 50
+#define map_size 10
 int user_count=5;
 
 struct player
@@ -807,7 +807,7 @@ void init_player(player *vis_player)
 
 void play()
 {
-    
+
 }
 
 void play_with_friend()
