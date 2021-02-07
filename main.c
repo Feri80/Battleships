@@ -111,6 +111,15 @@ bool delete_ship(ship *ships,int id)
     return 0;
 }
 
+void print_ships(ship *ships)
+{
+    ship *current;
+    for(current=ships;current!=NULL;current=current->next)
+    {
+        printf("%d (%d,%d) , (%d,%d) , (%d/%d)\n",current->id,current->x1,current->y1,current->x2,current->y2,current->sz,current->cur);
+    }
+}
+
 void create_settings()
 {
     FILE *fout=fopen("Resources\\settings.bin","wb");
