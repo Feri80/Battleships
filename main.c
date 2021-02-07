@@ -950,9 +950,12 @@ bool turn(player *player1,player *player2,int t)
 
 void play(player *player1,player *player2,int t)
 {
+    fflush(stdin);
     while(ships1!=NULL && ships2!=NULL)
     {
+        fflush(stdin);
         bool sw=turn(player1,player2,t);
+        fflush(stdin);
         if(sw==0)
         {
             if(t==1)
@@ -966,16 +969,34 @@ void play(player *player1,player *player2,int t)
         }
     }
     int a=search_name(player1->name);
+    fflush(stdin);
     int b=search_name(player2->name);
+    fflush(stdin);
     if(ships2==NULL)
     {
-        add_score(a,player1->delta_score);    
-        add_score(b,player2->delta_score/2);    
+        add_score(a,player1->delta_score);
+        fflush(stdin);    
+        add_score(b,player2->delta_score/2);
+        fflush(stdin);        
+        system("cls");
+        printf("\t%s WON THE GAME !!!\n\n",player1->name);
+        system("pause");
+        system("cls");
+        system("cls");
+        fflush(stdin);
     }
     else
     {
-        add_score(a,player1->delta_score/2);    
+        add_score(a,player1->delta_score/2);
+        fflush(stdin);    
         add_score(b,player2->delta_score);
+        fflush(stdin);
+        system("cls");
+        printf("\t%s WON THE GAME !!!\n\n",player2->name);
+        system("pause");
+        system("cls");
+        system("cls");
+        fflush(stdin);
     }
 }
 
@@ -994,8 +1015,8 @@ void play_with_friend()
     fflush(stdin);
     make_lists(2);
     fflush(stdin);
-    
-
+    play(&player1,&player2,1);
+    fflush(stdin);
 }
 
 void player_with_cpu()
