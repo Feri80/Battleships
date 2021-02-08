@@ -13,6 +13,12 @@
 #include <ctype.h>
 #include <stdarg.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 typedef long long ll;
 
 const int mod=1e9+7;
@@ -945,24 +951,33 @@ void init_player(player *vis_player)
 
 bool check_valid_target(player *op_player,int x,int y)
 {
-    if(x==-2 && y==-2)
+    if(op_player->visible_map[x][y]!=' ')
     {
         return 0;
     }
+    
+}
+
+void update_list(player *op_player,int x,int y,int t)
+{
+
 }
 
 bool turn(player *player1,player *player2,int t)
 {
     fflush(stdin);
-    player op_player;
+    bool sw=0;
+    player *op_player;
     if(t==1)
     {
+        printf("%s This Is Your Turn \n",player1->name);
         op_player=player2;
         show_visible_map(player2);
         fflush(stdin);
     }
     if(t==2)
     {
+        printf("%s This Is Your Turn \n",player2->name);
         op_player=player1;
         show_visible_map(player1);
         fflush(stdin);
@@ -977,13 +992,13 @@ bool turn(player *player1,player *player2,int t)
         fflush(stdin);
         if(x==-1 && y==-1)
         {
-            //break
+            break;
         }
         else if(x==-2 && y==-2)
         {
 
         }
-        else if(x>=0 && x<10 && y>=0 && y<10);
+        else if(x>=0 && x<10 && y>=0 && y<10)
         {
             if(check_valid_target(op_player,x,y)==0)
             {
@@ -991,7 +1006,19 @@ bool turn(player *player1,player *player2,int t)
                 continue;
             }
             //break
-
+            if(op_player->hidden_map[x][y]<0)
+            {
+                op_player->visible_map[x][y]='W';
+            }
+            else
+            {
+                op_player->visible_map[x][y]='*';
+                sw=1;
+                fflush(stdin);
+                update_list(op_player,x,y,t);
+                fflush(stdin);
+            }
+            break;
         }
         else
         {
@@ -999,6 +1026,17 @@ bool turn(player *player1,player *player2,int t)
             continue;
         }
     }while(1);
+    fflush(stdin);
+    Sleep(2000);
+    system("cls");
+    system("cls");
+    printf("This Is %s Map After Your Turn \n",op_player->name);
+    show_visible_map(op_player);
+    system("pause");
+    system("cls");
+    system("cls");
+    fflush(stdin);
+    return sw;
 }
 
 void play(player *player1,player *player2,int t)
@@ -1027,6 +1065,10 @@ void play(player *player1,player *player2,int t)
     fflush(stdin);
     if(ships2==NULL)
     {
+        while(ships1!=NULL)
+        {
+            delete_ship(&ships1,ships1->id);
+        }
         add_score(a,player1->delta_score);
         fflush(stdin);    
         add_score(b,player2->delta_score/2);
@@ -1040,6 +1082,10 @@ void play(player *player1,player *player2,int t)
     }
     else
     {
+        while(ships2!=NULL)
+        {
+            delete_ship(&ships2,ships2->id);
+        }
         add_score(a,player1->delta_score/2);
         fflush(stdin);    
         add_score(b,player2->delta_score);
@@ -1142,6 +1188,5 @@ void show_mainmenu()
 
 int main()
 {
-    load_settings();
-    play_with_friend();
+
 }
