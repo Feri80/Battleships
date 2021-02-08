@@ -1343,7 +1343,37 @@ bool turn(player *player1,player *player2,int t)
         }
         else if(x==-2 && y==-2)
         {
-
+            fflush(stdin);
+            save_info info;
+            info.t=t;
+            info.type=2;
+            info.player1=*player1;
+            info.player2=*player2;
+            char temp[max_name_size];
+            do
+            {
+                printf("Please Enter A Name For Your Save : ");
+                fflush(stdin);
+                scanf("%s",&temp);
+                strcpy(info.name,temp);
+                fflush(stdin);
+            }while(save_game(info)==0);
+            printf("The Game Successfully Saved\n");
+            fflush(stdin);
+            char c;
+            do
+            {
+                printf("Do You Want Quit (y/n) / (Y/N) : ");
+                fflush(stdin);
+                scanf("%c",&c);
+                if(c=='Y' || c=='y')
+                {
+                    system("pause");
+                    exit(0);
+                }
+                fflush(stdin);
+            }while(c!='y' && c!='Y' && c!='n' && c!='N');
+            fflush(stdin);
         }
         else if(x>=0 && x<10 && y>=0 && y<10)
         {
@@ -1514,12 +1544,12 @@ void player_with_cpu()
     fflush(stdin);
 }
 
-void show_menu3()
+void load_all_games()
 {
     
 }
 
-void show_menu4()
+void load_last_game()
 {
     
 }
@@ -1580,5 +1610,5 @@ void show_mainmenu()
 
 int main()
 {
-    
+
 }
