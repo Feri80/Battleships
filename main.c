@@ -21,6 +21,17 @@
 
 typedef long long ll;
 
+typedef enum
+{
+    BLACK = 0, BLUE = 1, GREEN = 2,
+    AQUA = 3, RED = 4, PURPLE = 5,
+    YELLOW = 6, WHITE = 7, GRAY = 8, 
+    LIGHT_BLUE = 9, LIGHT_GREEN = 10,
+    LIGHT_AQUA = 11, LIGHT_RED = 12, 
+    LIGHT_PURPLE = 13, LIGHT_YELLOW = 14,
+    LIGHT_WHITE = 15
+} ConsoleColors;
+
 const int mod=1e9+7;
 const ll inf=1000000000000000000L;
 const double eps=1e-7;
@@ -29,6 +40,20 @@ const double pi=3.14159265359;
 #define max_name_size 50
 #define map_size 10
 int user_count=0;
+
+typedef HANDLE Handle;
+typedef CONSOLE_SCREEN_BUFFER_INFO BufferInfo;
+typedef WORD Word;
+short setTextColor(const ConsoleColors foreground)
+{
+    Handle consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    BufferInfo bufferInfo;
+    if(!GetConsoleScreenBufferInfo(consoleHandle, &bufferInfo))
+        return 0;
+    Word color = (bufferInfo.wAttributes & 0xF0) + (foreground & 0x0F);
+    SetConsoleTextAttribute(consoleHandle, color);
+    return 1;
+}
 
 struct player
 {
@@ -152,11 +177,13 @@ void load_settings()
 void show_visible_map(player *vis_player)
 {
     printf("\n  ");
+    setTextColor(LIGHT_GREEN);
     for(int i=0;i<10;i++)
     {
         printf("  %d ",i);
     }
     printf("\n  ");
+    setTextColor(WHITE);
     for(int i=0;i<10;i++)
     {
         printf(" ---");
@@ -164,13 +191,30 @@ void show_visible_map(player *vis_player)
     for(int i=0;i<10;i++)
     {
         printf("\n");
+        setTextColor(LIGHT_GREEN);
         printf("%d ",i);
+        setTextColor(WHITE);
         printf("| ");
         for(int j=0;j<10;j++)
         {
-            printf("%c | ",vis_player->visible_map[i][j]);
+            if(vis_player->visible_map[i][j]=='W')
+            {
+                setTextColor(AQUA);
+            }
+            else if(vis_player->visible_map[i][j]=='*')
+            {
+                setTextColor(RED);
+            }
+            else if(vis_player->visible_map[i][j]=='#')
+            {
+                setTextColor(PURPLE);
+            }
+            printf("%c",vis_player->visible_map[i][j]);
+            setTextColor(WHITE);
+            printf(" | ");
         }
         printf("\n  ");
+        setTextColor(WHITE);
         for(int j=0;j<10;j++)
         {
             printf(" ---");
@@ -181,11 +225,13 @@ void show_visible_map(player *vis_player)
 void show_hidden_map(player *vis_player)
 {
     printf("\n  ");
+    setTextColor(LIGHT_GREEN);
     for(int i=0;i<10;i++)
     {
         printf("  %d ",i);
     }
     printf("\n  ");
+    setTextColor(WHITE);
     for(int i=0;i<10;i++)
     {
         printf(" ---");
@@ -193,24 +239,34 @@ void show_hidden_map(player *vis_player)
     for(int i=0;i<10;i++)
     {
         printf("\n");
+        setTextColor(LIGHT_GREEN);
         printf("%d ",i);
+        setTextColor(WHITE);
         printf("| ");
         for(int j=0;j<10;j++)
         {
             if(vis_player->hidden_map[i][j]==-1)
             {
-                printf("  | ",vis_player->hidden_map[i][j]);
+                setTextColor(WHITE);
+                printf("  | ");
             }   
             else if(vis_player->hidden_map[i][j]==-2)
             {
-                printf("L | ",vis_player->hidden_map[i][j]);
+                setTextColor(RED);
+                printf("L");
+                setTextColor(WHITE);
+                printf(" | ");
             }
             else
             {
-                printf("%d | ",vis_player->hidden_map[i][j]);
+                setTextColor(BLUE);
+                printf("%d",vis_player->hidden_map[i][j]);
+                setTextColor(WHITE);
+                printf(" | ");
             }
         }
         printf("\n  ");
+        setTextColor(WHITE);
         for(int j=0;j<10;j++)
         {
             printf(" ---");
@@ -320,6 +376,7 @@ void add_score(int id,int x)
     FILE *fout=fopen("Resources\\usernames.bin","r+b");
     fseek(fin,id*sizeof(username),SEEK_SET);
     fwrite(&new_username,sizeof(username),1,fin);
+    fclose(fout);
 }
 
 void use_existing_name(player *vis_player)
@@ -988,35 +1045,35 @@ void update_list(player *op_player,int x,int y,int t)
                 for(int i=fmin(y1,y2);i<=fmax(y1,y2);i++)
                 {
                     op_player->visible_map[x1][i]='#';
-                    if(op_player->visible_map[x1][i+1]==' ')
+                    if(x1<10 && x1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[x1][i+1]==' ')
                     {
                         op_player->visible_map[x1][i+1]='W';
                     }
-                    if(op_player->visible_map[x1][i-1]==' ')
+                    if(x1<10 && x1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[x1][i-1]==' ')
                     {
                         op_player->visible_map[x1][i-1]='W';
                     }
-                    if(op_player->visible_map[x1+1][i]==' ')
+                    if(x1+1<10 && x1+1>=0 && i<10 && i>=0 && op_player->visible_map[x1+1][i]==' ')
                     {
                         op_player->visible_map[x1+1][i]='W';
                     }
-                    if(op_player->visible_map[x1-1][i]==' ')
+                    if(x1-1<10 && x1-1>=0 && i<10 && i>=0 && op_player->visible_map[x1-1][i]==' ')
                     {
                         op_player->visible_map[x1-1][i]='W';
                     }
-                    if(op_player->visible_map[x1+1][i+1]==' ')
+                    if(x1+1<10 && x1+1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[x1+1][i+1]==' ')
                     {
                         op_player->visible_map[x1+1][i+1]='W';
                     }
-                    if(op_player->visible_map[x1-1][i+1]==' ')
+                    if(x1-1<10 && x1-1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[x1-1][i+1]==' ')
                     {
                         op_player->visible_map[x1-1][i+1]='W';
                     }
-                    if(op_player->visible_map[x1+1][i-1]==' ')
+                    if(x1+1<10 && x1+1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[x1+1][i-1]==' ')
                     {
                         op_player->visible_map[x1+1][i-1]='W';
                     }
-                    if(op_player->visible_map[x1-1][i-1]==' ')
+                    if(x1-1<10 && x1-1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[x1-1][i-1]==' ')
                     {
                         op_player->visible_map[x1-1][i-1]='W';
                     }
@@ -1027,35 +1084,35 @@ void update_list(player *op_player,int x,int y,int t)
                 for(int i=fmin(x1,x2);i<=fmax(x1,x2);i++)
                 {
                     op_player->visible_map[i][y1]='#';
-                    if(op_player->visible_map[i][y1+1]==' ')
+                    if(y1<10 && y1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i][y1+1]==' ')
                     {
                         op_player->visible_map[i][y1+1]='W';
                     }
-                    if(op_player->visible_map[i][y1-1]==' ')
+                    if(y1-1<10 && y1-1>=0 && i<10 && i>=0 && op_player->visible_map[i][y1-1]==' ')
                     {
                         op_player->visible_map[i][y1-1]='W';
                     }
-                    if(op_player->visible_map[i+1][y1]==' ')
+                    if(y1<10 && y1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i+1][y1]==' ')
                     {
                         op_player->visible_map[i+1][y1]='W';
                     }
-                    if(op_player->visible_map[i-1][y1]==' ')
+                    if(y1<10 && y1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[i-1][y1]==' ')
                     {
                         op_player->visible_map[i-1][y1]='W';
                     }
-                    if(op_player->visible_map[i+1][y1+1]==' ')
+                    if(y1+1<10 && y1+1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i+1][y1+1]==' ')
                     {
                         op_player->visible_map[i+1][y1+1]='W';
                     }
-                    if(op_player->visible_map[i-1][y1+1]==' ')
+                    if(y1+1<10 && y1+1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[i-1][y1+1]==' ')
                     {
                         op_player->visible_map[i-1][y1+1]='W';
                     }
-                    if(op_player->visible_map[i+1][y1-1]==' ')
+                    if(y1-1<10 && y1-1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i+1][y1-1]==' ')
                     {
                         op_player->visible_map[i+1][y1-1]='W';
                     }
-                    if(op_player->visible_map[i-1][y1-1]==' ')
+                    if(y1-1<10 && y1-1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[i-1][y1-1]==' ')
                     {
                         op_player->visible_map[i-1][y1-1]='W';
                     }
@@ -1080,37 +1137,37 @@ void update_list(player *op_player,int x,int y,int t)
                 for(int i=fmin(y1,y2);i<=fmax(y1,y2);i++)
                 {
                     op_player->visible_map[x1][i]='#';
-                    if(op_player->visible_map[x1][i+1]==' ')
+                    if(x1<10 && x1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[x1][i+1]==' ')
                     {
-                        op_player->visible_map[x1][i+1]=='W';
+                        op_player->visible_map[x1][i+1]='W';
                     }
-                    if(op_player->visible_map[x1][i-1]==' ')
+                    if(x1<10 && x1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[x1][i-1]==' ')
                     {
-                        op_player->visible_map[x1][i-1]=='W';
+                        op_player->visible_map[x1][i-1]='W';
                     }
-                    if(op_player->visible_map[x1+1][i]==' ')
+                    if(x1+1<10 && x1+1>=0 && i<10 && i>=0 && op_player->visible_map[x1+1][i]==' ')
                     {
-                        op_player->visible_map[x1+1][i]=='W';
+                        op_player->visible_map[x1+1][i]='W';
                     }
-                    if(op_player->visible_map[x1-1][i]==' ')
+                    if(x1-1<10 && x1-1>=0 && i<10 && i>=0 && op_player->visible_map[x1-1][i]==' ')
                     {
-                        op_player->visible_map[x1-1][i]=='W';
+                        op_player->visible_map[x1-1][i]='W';
                     }
-                    if(op_player->visible_map[x1+1][i+1]==' ')
+                    if(x1+1<10 && x1+1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[x1+1][i+1]==' ')
                     {
-                        op_player->visible_map[x1+1][i+1]=='W';
+                        op_player->visible_map[x1+1][i+1]='W';
                     }
-                    if(op_player->visible_map[x1-1][i+1]==' ')
+                    if(x1-1<10 && x1-1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[x1-1][i+1]==' ')
                     {
-                        op_player->visible_map[x1-1][i+1]=='W';
+                        op_player->visible_map[x1-1][i+1]='W';
                     }
-                    if(op_player->visible_map[x1+1][i-1]==' ')
+                    if(x1+1<10 && x1+1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[x1+1][i-1]==' ')
                     {
-                        op_player->visible_map[x1+1][i-1]=='W';
+                        op_player->visible_map[x1+1][i-1]='W';
                     }
-                    if(op_player->visible_map[x1-1][i-1]==' ')
+                    if(x1-1<10 && x1-1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[x1-1][i-1]==' ')
                     {
-                        op_player->visible_map[x1-1][i-1]=='W';
+                        op_player->visible_map[x1-1][i-1]='W';
                     }
                 }
             }
@@ -1119,37 +1176,37 @@ void update_list(player *op_player,int x,int y,int t)
                 for(int i=fmin(x1,x2);i<=fmax(x1,x2);i++)
                 {
                     op_player->visible_map[i][y1]='#';
-                    if(op_player->visible_map[i][y1+1]==' ')
+                    if(y1<10 && y1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i][y1+1]==' ')
                     {
-                        op_player->visible_map[i][y1+1]=='W';
+                        op_player->visible_map[i][y1+1]='W';
                     }
-                    if(op_player->visible_map[i][y1-1]==' ')
+                    if(y1-1<10 && y1-1>=0 && i<10 && i>=0 && op_player->visible_map[i][y1-1]==' ')
                     {
-                        op_player->visible_map[i][y1-1]=='W';
+                        op_player->visible_map[i][y1-1]='W';
                     }
-                    if(op_player->visible_map[i+1][y1]==' ')
+                    if(y1<10 && y1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i+1][y1]==' ')
                     {
-                        op_player->visible_map[i+1][y1]=='W';
+                        op_player->visible_map[i+1][y1]='W';
                     }
-                    if(op_player->visible_map[i-1][y1]==' ')
+                    if(y1<10 && y1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[i-1][y1]==' ')
                     {
-                        op_player->visible_map[i-1][y1]=='W';
+                        op_player->visible_map[i-1][y1]='W';
                     }
-                    if(op_player->visible_map[i+1][y1+1]==' ')
+                    if(y1+1<10 && y1+1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i+1][y1+1]==' ')
                     {
-                        op_player->visible_map[i+1][y1+1]=='W';
+                        op_player->visible_map[i+1][y1+1]='W';
                     }
-                    if(op_player->visible_map[i-1][y1+1]==' ')
+                    if(y1+1<10 && y1+1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[i-1][y1+1]==' ')
                     {
-                        op_player->visible_map[i-1][y1+1]=='W';
+                        op_player->visible_map[i-1][y1+1]='W';
                     }
-                    if(op_player->visible_map[i+1][y1-1]==' ')
+                    if(y1-1<10 && y1-1>=0 && i+1<10 && i+1>=0 && op_player->visible_map[i+1][y1-1]==' ')
                     {
-                        op_player->visible_map[i+1][y1-1]=='W';
+                        op_player->visible_map[i+1][y1-1]='W';
                     }
-                    if(op_player->visible_map[i-1][y1-1]==' ')
+                    if(y1-1<10 && y1-1>=0 && i-1<10 && i-1>=0 && op_player->visible_map[i-1][y1-1]==' ')
                     {
-                        op_player->visible_map[i-1][y1-1]=='W';
+                        op_player->visible_map[i-1][y1-1]='W';
                     }
                 }
             }
@@ -1220,7 +1277,7 @@ bool turn(player *player1,player *player2,int t)
         }
     }while(1);
     fflush(stdin);
-    Sleep(2000);
+    Sleep(1000);
     system("cls");
     system("cls");
     printf("This Is %s Map After Your Turn \n",op_player->name);
