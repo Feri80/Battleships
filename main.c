@@ -151,6 +151,46 @@ bool load_game(save_info *info,char *name)
     return 0;
 }
 
+void print_saves()
+{
+    save_info temp;
+    FILE *fin=fopen("Resources\\saves.bin","rb");
+    if(fin==NULL)
+    {
+        printf("There Is Not Any Saved Game\n");
+        fclose(fin);
+        return;
+    }
+    while(fread(&temp,sizeof(save_info),1,fin)>=1)
+    {
+        setTextColor(PURPLE);
+        printf("------------------------------------------\n");
+        setTextColor(GREEN);
+        puts(temp.name);
+        printf("%s VS %s\n",temp.player1.name,temp.player2.name);
+        if(temp.t==1)
+        {
+            printf("Turn : %s\n",temp.player1.name);
+        }
+        else
+        {
+            printf("Turn : %s\n",temp.player2.name);
+        }
+        if(temp.type==1)
+        {
+            printf("Type : Play With CPU\n");
+        }   
+        else
+        {
+            printf("Type : Play With A Friend\n");
+        }
+        setTextColor(PURPLE);
+        printf("------------------------------------------\n");
+        setTextColor(WHITE);
+    }
+    fclose(fin);
+}
+
 void add_end(ship **pships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
 {
     ship *new_ship=(ship*)malloc(sizeof(ship));
