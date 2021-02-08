@@ -28,7 +28,7 @@ const double pi=3.14159265359;
 
 #define max_name_size 50
 #define map_size 10
-int user_count=1;
+int user_count=0;
 
 struct player
 {
@@ -1266,7 +1266,7 @@ void play(player *player1,player *player2,int t)
             }
             else if(ships1->sz==2)
             {
-                nscore-=12
+                nscore-=12;
             }
             else if(ships1->sz==1)
             {
@@ -1303,7 +1303,7 @@ void play(player *player1,player *player2,int t)
             }
             else if(ships2->sz==2)
             {
-                nscore-=12
+                nscore-=12;
             }
             else if(ships2->sz==1)
             {
@@ -1414,5 +1414,6 @@ void show_mainmenu()
 
 int main()
 {
-
+    load_settings();
+    show_mainmenu();
 }
