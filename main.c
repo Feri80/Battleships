@@ -1081,14 +1081,22 @@ void make_lists(int player_number)
     {
         for(int i=0;i<10;i++)
         {
-           add_end(&ships1,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+            if(total_ships[i].cur>0)
+            {
+                add_end(&ships1,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+            }
+           
         }
     }
     else
     {
         for(int i=0;i<10;i++)
         {
-            add_end(&ships2,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+            if(total_ships[i].cur>0)
+            {
+                add_end(&ships2,i,total_ships[i].x1,total_ships[i].x2,total_ships[i].y1,total_ships[i].y2,total_ships[i].sz,total_ships[i].cur);
+            }
+            
         }
     }
     
@@ -1546,7 +1554,152 @@ void player_with_cpu()
 
 void load_all_games()
 {
-    
+    print_saves();
+    fflush(stdin);
+    save_info info;
+    char temp[max_name_size];
+    printf("Please Enter Your Save Name : ");
+    fflush(stdin);
+    scanf("%d",&temp);
+    if(load_game(&info,temp==0))
+    {
+        printf("Can't Load This Save \n");
+        fflush(stdin);
+        return;
+    }
+    player player1=info.player1;
+    player player2=info.player2;
+    fflush(stdin);
+    for(int k=0;k<10;k++)
+    {
+        int x1,x2,y1,y2;
+        int sz=0;
+        int cur=0;
+        int id=k;
+        int sw=1;
+        for(int i=0;i<10;i++)
+        {
+            for(int j=0;j<10;j++)
+            {
+                int cnt=0;
+                if(player1.hidden_map[i][j]==id)
+                {
+                    sz++;
+                    if(player1.visible_map[i][j]==' ')
+                    {
+                        cur++;
+                    }
+                    if(j+1>=0 && j+1<10 && player1.hidden_map[i][j+1]==id)
+                    {
+                        cnt++;
+                    }
+                    if(j-1>=0 && j-1<10 && player1.hidden_map[i][j-1]==id)
+                    {
+                        cnt++;
+                    }
+                    if(i+1>=0 && i+1<10 && player1.hidden_map[i+1][j]==id)
+                    {
+                        cnt++;
+                    }
+                    if(i-1>=0 && i-1<10 && player1.hidden_map[i-1][j]==id)
+                    {
+                        cnt++;
+                    }
+                    if(cnt<2)
+                    {
+                        if(sw==1)
+                        {
+                            sw++;
+                            x1=i;
+                            y1=j;
+                        }
+                        else
+                        {
+                            x2=i;
+                            y2=j;
+                        }
+                    }
+                }
+            }
+        }
+        total_ships[k].x1=x1;
+        total_ships[k].x2=x2;
+        total_ships[k].y1=y1;
+        total_ships[k].y1=y2;
+        total_ships[k].id=id;
+        total_ships[k].sz=sz;
+        total_ships[k].cur=cur;
+    }
+    make_lists(1);
+
+    fflush(stdin);
+    for(int k=0;k<10;k++)
+    {
+        int x1,x2,y1,y2;
+        int sz=0;
+        int cur=0;
+        int id=k;
+        int sw=1;
+        for(int i=0;i<10;i++)
+        {
+            for(int j=0;j<10;j++)
+            {
+                int cnt=0;
+                if(player2.hidden_map[i][j]==id)
+                {
+                    sz++;
+                    if(player2.visible_map[i][j]==' ')
+                    {
+                        cur++;
+                    }
+                    if(j+1>=0 && j+1<10 && player2.hidden_map[i][j+1]==id)
+                    {
+                        cnt++;
+                    }
+                    if(j-1>=0 && j-1<10 && player2.hidden_map[i][j-1]==id)
+                    {
+                        cnt++;
+                    }
+                    if(i+1>=0 && i+1<10 && player2.hidden_map[i+1][j]==id)
+                    {
+                        cnt++;
+                    }
+                    if(i-1>=0 && i-1<10 && player2.hidden_map[i-1][j]==id)
+                    {
+                        cnt++;
+                    }
+                    if(cnt<2)
+                    {
+                        if(sw==1)
+                        {
+                            sw++;
+                            x1=i;
+                            y1=j;
+                        }
+                        else
+                        {
+                            x2=i;
+                            y2=j;
+                        }
+                    }
+                }
+            }
+        }
+        total_ships[k].x1=x1;
+        total_ships[k].x2=x2;
+        total_ships[k].y1=y1;
+        total_ships[k].y1=y2;
+        total_ships[k].id=id;
+        total_ships[k].sz=sz;
+        total_ships[k].cur=cur;
+    }
+    make_lists(2);
+
+    fflush(stdin);
+    if(info.type==2)
+    {
+        play(&player1,&player2,info.t);
+    }
 }
 
 void load_last_game()
@@ -1569,7 +1722,9 @@ void show_mainmenu()
         scanf("%d",&x);
         if(x==1)
         {
+            fflush(stdin);
             play_with_friend();
+            fflush(stdin);
         }   
         else if(x==2)
         {
@@ -1577,7 +1732,9 @@ void show_mainmenu()
         }
         else if(x==3)
         {
-            
+            fflush(stdin);
+            load_all_games();
+            fflush(stdin);
         }
         else if(x==4)
         {
