@@ -227,8 +227,7 @@ int search_name(char *name)
         system("pause");
         exit(0);
     }
-    fseek(fin,sizeof(username),SEEK_SET);
-    for(int i=1;i<user_count;i++)
+    for(int i=0;i<user_count;i++)
     {
         username new_username;
         fread(&new_username,sizeof(username),1,fin);
@@ -942,13 +941,21 @@ void make_lists(int player_number)
     
 }
 
-void init_player(player *vis_player)
+bool init_player(player *vis_player,int ch,char *first)
 {
     fflush(stdin);
     get_name(vis_player);
+    if(ch==2)
+    {
+        if(strcmp(first,vis_player->name)==0)
+        {
+            return 0;
+        }
+    }
     fflush(stdin);
     get_map(vis_player);
     fflush(stdin);
+    return 1;
 }
 
 bool check_valid_target(player *op_player,int x,int y)
@@ -983,35 +990,35 @@ void update_list(player *op_player,int x,int y,int t)
                     op_player->visible_map[x1][i]='#';
                     if(op_player->visible_map[x1][i+1]==' ')
                     {
-                        op_player->visible_map[x1][i+1]=='W';
+                        op_player->visible_map[x1][i+1]='W';
                     }
                     if(op_player->visible_map[x1][i-1]==' ')
                     {
-                        op_player->visible_map[x1][i-1]=='W';
+                        op_player->visible_map[x1][i-1]='W';
                     }
                     if(op_player->visible_map[x1+1][i]==' ')
                     {
-                        op_player->visible_map[x1+1][i]=='W';
+                        op_player->visible_map[x1+1][i]='W';
                     }
                     if(op_player->visible_map[x1-1][i]==' ')
                     {
-                        op_player->visible_map[x1-1][i]=='W';
+                        op_player->visible_map[x1-1][i]='W';
                     }
                     if(op_player->visible_map[x1+1][i+1]==' ')
                     {
-                        op_player->visible_map[x1+1][i+1]=='W';
+                        op_player->visible_map[x1+1][i+1]='W';
                     }
                     if(op_player->visible_map[x1-1][i+1]==' ')
                     {
-                        op_player->visible_map[x1-1][i+1]=='W';
+                        op_player->visible_map[x1-1][i+1]='W';
                     }
                     if(op_player->visible_map[x1+1][i-1]==' ')
                     {
-                        op_player->visible_map[x1+1][i-1]=='W';
+                        op_player->visible_map[x1+1][i-1]='W';
                     }
                     if(op_player->visible_map[x1-1][i-1]==' ')
                     {
-                        op_player->visible_map[x1-1][i-1]=='W';
+                        op_player->visible_map[x1-1][i-1]='W';
                     }
                 }
             }
@@ -1022,35 +1029,35 @@ void update_list(player *op_player,int x,int y,int t)
                     op_player->visible_map[i][y1]='#';
                     if(op_player->visible_map[i][y1+1]==' ')
                     {
-                        op_player->visible_map[i][y1+1]=='W';
+                        op_player->visible_map[i][y1+1]='W';
                     }
                     if(op_player->visible_map[i][y1-1]==' ')
                     {
-                        op_player->visible_map[i][y1-1]=='W';
+                        op_player->visible_map[i][y1-1]='W';
                     }
                     if(op_player->visible_map[i+1][y1]==' ')
                     {
-                        op_player->visible_map[i+1][y1]=='W';
+                        op_player->visible_map[i+1][y1]='W';
                     }
                     if(op_player->visible_map[i-1][y1]==' ')
                     {
-                        op_player->visible_map[i-1][y1]=='W';
+                        op_player->visible_map[i-1][y1]='W';
                     }
                     if(op_player->visible_map[i+1][y1+1]==' ')
                     {
-                        op_player->visible_map[i+1][y1+1]=='W';
+                        op_player->visible_map[i+1][y1+1]='W';
                     }
                     if(op_player->visible_map[i-1][y1+1]==' ')
                     {
-                        op_player->visible_map[i-1][y1+1]=='W';
+                        op_player->visible_map[i-1][y1+1]='W';
                     }
                     if(op_player->visible_map[i+1][y1-1]==' ')
                     {
-                        op_player->visible_map[i+1][y1-1]=='W';
+                        op_player->visible_map[i+1][y1-1]='W';
                     }
                     if(op_player->visible_map[i-1][y1-1]==' ')
                     {
-                        op_player->visible_map[i-1][y1-1]=='W';
+                        op_player->visible_map[i-1][y1-1]='W';
                     }
                 }
             }
@@ -1172,7 +1179,7 @@ bool turn(player *player1,player *player2,int t)
     int x,y;
     do
     {
-        printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game\n)");
+        printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game)\n");
         fflush(stdin);
         scanf("%d",&x);
         scanf("%d",&y);
@@ -1218,6 +1225,7 @@ bool turn(player *player1,player *player2,int t)
     system("cls");
     printf("This Is %s Map After Your Turn \n",op_player->name);
     show_visible_map(op_player);
+    printf("\n");
     system("pause");
     system("cls");
     system("cls");
@@ -1331,12 +1339,14 @@ void play_with_friend()
     player player1;
     player player2;
 
-    init_player(&player1);
+    init_player(&player1,1,"a");
     fflush(stdin);
     make_lists(1);
     fflush(stdin);
-
-    init_player(&player2);
+    while(init_player(&player2,2,player1.name)==0)
+    {
+        fflush(stdin);
+    }
     fflush(stdin);
     make_lists(2);
     fflush(stdin);
@@ -1348,7 +1358,6 @@ void player_with_cpu()
 {
     fflush(stdin);
     player player1;
-    init_player(&player1);
     fflush(stdin);
 }
 
@@ -1365,11 +1374,13 @@ void show_menu4()
 
 void show_mainmenu()
 {
+    system("cls");
+    system("cls");
     fflush(stdin);
-    printf("\t\tMAIN MENU\n------------------------------\n");
     int x;
     do
     {
+        printf("\n\t\tMAIN MENU\n-----------------------------------------\n");
         printf("1) Play With A Friend \n2) Play With CPU \n3) Load Game \n4) Load Last Game \n5) Play Back \n6) Score Board \n7) Exit \n");
         fflush(stdin);
         scanf("%d",&x);
@@ -1406,8 +1417,10 @@ void show_mainmenu()
         else
         {
             fflush(stdin);
+            system("cls");
             continue;
         }
+
     } while (x!=7);
 }
 
