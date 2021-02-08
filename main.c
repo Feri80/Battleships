@@ -61,6 +61,8 @@ struct ship
 };
 typedef struct ship ship;
 
+
+
 ship total_ships[10];
 ship *ships1=NULL;
 ship *ships2=NULL;
@@ -955,7 +957,7 @@ bool check_valid_target(player *op_player,int x,int y)
     {
         return 0;
     }
-    
+    return 1;
 }
 
 void update_list(player *op_player,int x,int y,int t)
@@ -1190,7 +1192,6 @@ bool turn(player *player1,player *player2,int t)
                 fflush(stdin);
                 continue;
             }
-            //break
             if(op_player->hidden_map[x][y]<0)
             {
                 op_player->visible_map[x][y]='W';
@@ -1250,10 +1251,30 @@ void play(player *player1,player *player2,int t)
     fflush(stdin);
     if(ships2==NULL)
     {
+        player1->delta_score+=178;
+        int nscore=178;
         while(ships1!=NULL)
-        {
+        {   
+            nscore-=ships1->cur;
+            if(ships1->sz==5)
+            {
+                nscore-=5;
+            }
+            else if(ships1->sz==3)
+            {
+                nscore-=8;
+            }
+            else if(ships1->sz==2)
+            {
+                nscore-=12
+            }
+            else if(ships1->sz==1)
+            {
+                nscore-=25;
+            }
             delete_ship(&ships1,ships1->id);
         }
+        player2->delta_score+=nscore;
         add_score(a,player1->delta_score);
         fflush(stdin);    
         add_score(b,player2->delta_score/2);
@@ -1265,12 +1286,32 @@ void play(player *player1,player *player2,int t)
         system("cls");
         fflush(stdin);
     }
-    else
+    else if(ships1==NULL)
     {
+        player2->delta_score+=178;
+        int nscore=178;
         while(ships2!=NULL)
-        {
+        {   
+            nscore-=ships2->cur;
+            if(ships2->sz==5)
+            {
+                nscore-=5;
+            }
+            else if(ships2->sz==3)
+            {
+                nscore-=8;
+            }
+            else if(ships2->sz==2)
+            {
+                nscore-=12
+            }
+            else if(ships2->sz==1)
+            {
+                nscore-=25;
+            }
             delete_ship(&ships2,ships2->id);
         }
+        player1->delta_score+=nscore;
         add_score(a,player1->delta_score/2);
         fflush(stdin);    
         add_score(b,player2->delta_score);
