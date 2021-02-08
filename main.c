@@ -86,14 +86,70 @@ struct ship
 };
 typedef struct ship ship;
 
-
-
 ship total_ships[10];
 ship *ships1=NULL;
 ship *ships2=NULL;
 
 int ship_count1=10;
 int ship_count2=10;
+
+struct save_info
+{
+    char name[max_name_size];
+    player player1;
+    player player2;
+    int t;
+    int type;
+};
+typedef struct save_info save_info;
+
+bool save_game(save_info info)
+{
+    FILE *fin=fopen("Resources\\saves.bin","rb");
+    save_info temp;
+    if(fin==NULL)
+    {
+        fclose(fin);
+    }
+    else
+    {
+        while(fread(&temp,sizeof(save_info),1,fin)>=1)
+        {   
+            if(strcmp(info.name,temp.name)==0)
+            {
+                fclose(fin);
+                return 0;
+            }
+        }
+    }
+    fclose(fin);
+
+    FILE *fout=fopen("Resources\\saves.bin","ab");
+    fwrite(&info,sizeof(save_info),1,fout);
+    fclose(fout);
+    return 1;
+}
+
+bool load_game(save_info *info,char *name)
+{
+    FILE *fin=fopen("Resources\\saves.bin","rb");
+    if(fin==NULL)
+    {
+        printf("There Is Not Any Saved Game\n");
+        fclose(fin);
+        return 0;
+    }
+    while(fread(info,sizeof(save_info),1,fin)>=1)
+    {
+        if(strcmp(info->name,name)==0)
+        {
+            fclose(fin);
+            return 1;
+        }
+    }
+    fclose(fin);
+    return 0;
+}
 
 void add_end(ship **pships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
 {
@@ -1484,6 +1540,5 @@ void show_mainmenu()
 
 int main()
 {
-    load_settings();
-    show_mainmenu();
+    
 }
