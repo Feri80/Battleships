@@ -200,7 +200,7 @@ void add_end(ship **pships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
     new_ship->y1=y1;
     new_ship->y2=y2;
     new_ship->sz=sz;
-    new_ship->cur=new_ship->sz;
+    new_ship->cur=cur;
     new_ship->next=NULL;
     ship *current;
     if(*pships==NULL)
@@ -1560,7 +1560,7 @@ void load_all_games()
     char temp[max_name_size];
     printf("Please Enter Your Save Name : ");
     fflush(stdin);
-    scanf("%d",&temp);
+    scanf("%s",&temp);
     if(load_game(&info,temp)==0)
     {
         printf("Can't Load This Save \n");
@@ -1585,9 +1585,9 @@ void load_all_games()
                 if(player1.hidden_map[i][j]==id)
                 {
                     sz++;
-                    if(player1.visible_map[i][j]==' ')
+                    if(player1.visible_map[i][j]=='*' || player1.visible_map[i][j]=='#')
                     {
-                        cur++;
+                        cur--;
                     }
                     if(j+1>=0 && j+1<10 && player1.hidden_map[i][j+1]==id)
                     {
@@ -1622,10 +1622,11 @@ void load_all_games()
                 }
             }
         }
+        cur+=sz;
         total_ships[k].x1=x1;
         total_ships[k].x2=x2;
         total_ships[k].y1=y1;
-        total_ships[k].y1=y2;
+        total_ships[k].y2=y2;
         total_ships[k].id=id;
         total_ships[k].sz=sz;
         total_ships[k].cur=cur;
@@ -1688,7 +1689,7 @@ void load_all_games()
         total_ships[k].x1=x1;
         total_ships[k].x2=x2;
         total_ships[k].y1=y1;
-        total_ships[k].y1=y2;
+        total_ships[k].y2=y2;
         total_ships[k].id=id;
         total_ships[k].sz=sz;
         total_ships[k].cur=cur;
