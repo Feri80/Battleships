@@ -707,7 +707,7 @@ void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
 
 int make_random_map(player *vis_player)
 {
-
+    return 0;
 }
 
 bool make_map(player *vis_player)
@@ -1561,7 +1561,7 @@ void load_all_games()
     printf("Please Enter Your Save Name : ");
     fflush(stdin);
     scanf("%d",&temp);
-    if(load_game(&info,temp==0))
+    if(load_game(&info,temp)==0)
     {
         printf("Can't Load This Save \n");
         fflush(stdin);
@@ -1767,5 +1767,6 @@ void show_mainmenu()
 
 int main()
 {
-
+    load_settings();
+    show_mainmenu();
 }
