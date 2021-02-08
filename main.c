@@ -960,7 +960,192 @@ bool check_valid_target(player *op_player,int x,int y)
 
 void update_list(player *op_player,int x,int y,int t)
 {
-
+    int id=op_player->hidden_map[x][y];
+    ship *current;
+    if(t==1)
+    {
+        for(current=ships2;current->id!=id;current=current->next);
+        (current->cur)--;
+        if(current->cur==0)
+        {
+            int x1,x2,y1,y2;
+            x1=current->x1;
+            x2=current->x2;
+            y1=current->y1;
+            y2=current->y2;
+            delete_ship(&ships2,current->id);
+            if(x1==x2)
+            {
+                for(int i=fmin(y1,y2);i<=fmax(y1,y2);i++)
+                {
+                    op_player->visible_map[x1][i]='#';
+                    if(op_player->visible_map[x1][i+1]==' ')
+                    {
+                        op_player->visible_map[x1][i+1]=='W';
+                    }
+                    if(op_player->visible_map[x1][i-1]==' ')
+                    {
+                        op_player->visible_map[x1][i-1]=='W';
+                    }
+                    if(op_player->visible_map[x1+1][i]==' ')
+                    {
+                        op_player->visible_map[x1+1][i]=='W';
+                    }
+                    if(op_player->visible_map[x1-1][i]==' ')
+                    {
+                        op_player->visible_map[x1-1][i]=='W';
+                    }
+                    if(op_player->visible_map[x1+1][i+1]==' ')
+                    {
+                        op_player->visible_map[x1+1][i+1]=='W';
+                    }
+                    if(op_player->visible_map[x1-1][i+1]==' ')
+                    {
+                        op_player->visible_map[x1-1][i+1]=='W';
+                    }
+                    if(op_player->visible_map[x1+1][i-1]==' ')
+                    {
+                        op_player->visible_map[x1+1][i-1]=='W';
+                    }
+                    if(op_player->visible_map[x1-1][i-1]==' ')
+                    {
+                        op_player->visible_map[x1-1][i-1]=='W';
+                    }
+                }
+            }
+            else if(y1==y2)
+            {
+                for(int i=fmin(x1,x2);i<=fmax(x1,x2);i++)
+                {
+                    op_player->visible_map[i][y1]='#';
+                    if(op_player->visible_map[i][y1+1]==' ')
+                    {
+                        op_player->visible_map[i][y1+1]=='W';
+                    }
+                    if(op_player->visible_map[i][y1-1]==' ')
+                    {
+                        op_player->visible_map[i][y1-1]=='W';
+                    }
+                    if(op_player->visible_map[i+1][y1]==' ')
+                    {
+                        op_player->visible_map[i+1][y1]=='W';
+                    }
+                    if(op_player->visible_map[i-1][y1]==' ')
+                    {
+                        op_player->visible_map[i-1][y1]=='W';
+                    }
+                    if(op_player->visible_map[i+1][y1+1]==' ')
+                    {
+                        op_player->visible_map[i+1][y1+1]=='W';
+                    }
+                    if(op_player->visible_map[i-1][y1+1]==' ')
+                    {
+                        op_player->visible_map[i-1][y1+1]=='W';
+                    }
+                    if(op_player->visible_map[i+1][y1-1]==' ')
+                    {
+                        op_player->visible_map[i+1][y1-1]=='W';
+                    }
+                    if(op_player->visible_map[i-1][y1-1]==' ')
+                    {
+                        op_player->visible_map[i-1][y1-1]=='W';
+                    }
+                }
+            }
+        }
+    }
+    else if(t==2)
+    {
+        for(current=ships1;current->id!=id;current=current->next);
+        (current->cur)--;
+        if(current->cur==0)
+        {
+            int x1,x2,y1,y2;
+            x1=current->x1;
+            x2=current->x2;
+            y1=current->y1;
+            y2=current->y2;
+            delete_ship(&ships1,current->id);
+            if(x1==x2)
+            {
+                for(int i=fmin(y1,y2);i<=fmax(y1,y2);i++)
+                {
+                    op_player->visible_map[x1][i]='#';
+                    if(op_player->visible_map[x1][i+1]==' ')
+                    {
+                        op_player->visible_map[x1][i+1]=='W';
+                    }
+                    if(op_player->visible_map[x1][i-1]==' ')
+                    {
+                        op_player->visible_map[x1][i-1]=='W';
+                    }
+                    if(op_player->visible_map[x1+1][i]==' ')
+                    {
+                        op_player->visible_map[x1+1][i]=='W';
+                    }
+                    if(op_player->visible_map[x1-1][i]==' ')
+                    {
+                        op_player->visible_map[x1-1][i]=='W';
+                    }
+                    if(op_player->visible_map[x1+1][i+1]==' ')
+                    {
+                        op_player->visible_map[x1+1][i+1]=='W';
+                    }
+                    if(op_player->visible_map[x1-1][i+1]==' ')
+                    {
+                        op_player->visible_map[x1-1][i+1]=='W';
+                    }
+                    if(op_player->visible_map[x1+1][i-1]==' ')
+                    {
+                        op_player->visible_map[x1+1][i-1]=='W';
+                    }
+                    if(op_player->visible_map[x1-1][i-1]==' ')
+                    {
+                        op_player->visible_map[x1-1][i-1]=='W';
+                    }
+                }
+            }
+            else if(y1==y2)
+            {
+                for(int i=fmin(x1,x2);i<=fmax(x1,x2);i++)
+                {
+                    op_player->visible_map[i][y1]='#';
+                    if(op_player->visible_map[i][y1+1]==' ')
+                    {
+                        op_player->visible_map[i][y1+1]=='W';
+                    }
+                    if(op_player->visible_map[i][y1-1]==' ')
+                    {
+                        op_player->visible_map[i][y1-1]=='W';
+                    }
+                    if(op_player->visible_map[i+1][y1]==' ')
+                    {
+                        op_player->visible_map[i+1][y1]=='W';
+                    }
+                    if(op_player->visible_map[i-1][y1]==' ')
+                    {
+                        op_player->visible_map[i-1][y1]=='W';
+                    }
+                    if(op_player->visible_map[i+1][y1+1]==' ')
+                    {
+                        op_player->visible_map[i+1][y1+1]=='W';
+                    }
+                    if(op_player->visible_map[i-1][y1+1]==' ')
+                    {
+                        op_player->visible_map[i-1][y1+1]=='W';
+                    }
+                    if(op_player->visible_map[i+1][y1-1]==' ')
+                    {
+                        op_player->visible_map[i+1][y1-1]=='W';
+                    }
+                    if(op_player->visible_map[i-1][y1-1]==' ')
+                    {
+                        op_player->visible_map[i-1][y1-1]=='W';
+                    }
+                }
+            }
+        }
+    }
 }
 
 bool turn(player *player1,player *player2,int t)
