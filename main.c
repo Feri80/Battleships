@@ -1471,6 +1471,85 @@ void play(player *player1,player *player2,int t)
     }
 }
 
+bool turn_bot(player *player1,player *CPU,int t)
+{
+
+}
+
+void play_bot(player *player1,player *CPU,int t)
+{
+    fflush(stdin);
+    while(ships1!=NULL && ships2!=NULL)
+    {
+        fflush(stdin);
+        bool sw=turn_bot(player1,CPU,t);
+        fflush(stdin);
+        if(sw==0)
+        {
+            if(t==1)
+            {
+                t=2;
+            }
+            else
+            {
+                t=1;
+            }
+        }
+    }
+    int a=search_name(player1->name);
+    fflush(stdin);
+    if(ships2==NULL)
+    {
+        player1->delta_score+=178;
+        while(ships1!=NULL)
+        {   
+            delete_ship(&ships1,ships1->id);
+        }
+        add_score(a,player1->delta_score);
+        fflush(stdin);       
+        system("cls");
+        printf("\t%s WON THE GAME !!!\n\n",player1->name);
+        system("pause");
+        system("cls");
+        system("cls");
+        fflush(stdin);
+    }
+    else if(ships1==NULL)
+    {
+        int nscore=178;
+        while(ships2!=NULL)
+        {   
+            nscore-=ships2->cur;
+            if(ships2->sz==5)
+            {
+                nscore-=5;
+            }
+            else if(ships2->sz==3)
+            {
+                nscore-=8;
+            }
+            else if(ships2->sz==2)
+            {
+                nscore-=12;
+            }
+            else if(ships2->sz==1)
+            {
+                nscore-=25;
+            }
+            delete_ship(&ships2,ships2->id);
+        }
+        player1->delta_score+=nscore;
+        add_score(a,player1->delta_score/2);
+        fflush(stdin);   
+        system("cls");
+        printf("\t%s WON THE GAME !!!\n\n",player2->name);
+        system("pause");
+        system("cls");
+        system("cls");
+        fflush(stdin);
+    }
+}
+
 // Menu Functions
 
 void play_with_friend()
@@ -1615,6 +1694,9 @@ void player_with_cpu()
 
     fflush(stdin);
     make_lists(2);
+    fflush(stdin);
+    
+    play_bot(&player1,&CPU,1);
     fflush(stdin);
 }
 
