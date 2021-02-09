@@ -1267,7 +1267,7 @@ void update_list(player *op_player,int x,int y,int t)
     }
 }
 
-bool turn(player *player1,player *player2,int t)
+int turn(player *player1,player *player2,int t)
 {
     fflush(stdin);
     bool sw=0;
@@ -1289,7 +1289,7 @@ bool turn(player *player1,player *player2,int t)
     int x,y;
     do
     {
-        printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game)\n");
+        printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game)\n(-3 -3 To Show Main Menu)\n");
         fflush(stdin);
         scanf("%d",&x);
         scanf("%d",&y);
@@ -1321,17 +1321,24 @@ bool turn(player *player1,player *player2,int t)
             char c;
             do
             {
-                printf("Do You Want Quit (y/n) / (Y/N) : ");
+                printf("Do You Want To Exit The Game (y/n) / (Y/N) : ");
                 fflush(stdin);
                 scanf("%c",&c);
                 if(c=='Y' || c=='y')
                 {
                     system("pause");
-                    exit(0);
+                    system("cls");
+                    return 2;
                 }
                 fflush(stdin);
             }while(c!='y' && c!='Y' && c!='n' && c!='N');
             fflush(stdin);
+        }
+        else if(x==-3 && y==-3)
+        {
+            fflush(stdin);
+            system("cls");
+            return 2;
         }
         else if(x>=0 && x<10 && y>=0 && y<10)
         {
@@ -1377,10 +1384,11 @@ bool turn(player *player1,player *player2,int t)
 void play(player *player1,player *player2,int t)
 {
     fflush(stdin);
+    int sw;
     while(ships1!=NULL && ships2!=NULL)
     {
         fflush(stdin);
-        bool sw=turn(player1,player2,t);
+        sw=turn(player1,player2,t);
         fflush(stdin);
         if(sw==0)
         {
@@ -1392,6 +1400,10 @@ void play(player *player1,player *player2,int t)
             {
                 t=1;
             }
+        }
+        if(sw==2)
+        {
+            break;
         }
     }
     int a=search_name(player1->name);
@@ -1424,18 +1436,27 @@ void play(player *player1,player *player2,int t)
             delete_ship(&ships1,ships1->id);
         }
         player2->delta_score+=nscore;
-        add_score(a,player1->delta_score);
-        fflush(stdin);    
-        add_score(b,player2->delta_score/2);
+        if(sw!=2)
+        {
+            add_score(a,player1->delta_score);
+        }
+        fflush(stdin);
+        if(sw!=2)
+        {
+            add_score(b,player2->delta_score/2);
+        }    
         fflush(stdin);        
         system("cls");
-        printf("\t%s WON THE GAME !!!\n\n",player1->name);
+        if(sw!=2)
+        {
+            printf("\t%s WON THE GAME !!!\n\n",player1->name);
+        }
         system("pause");
         system("cls");
         system("cls");
         fflush(stdin);
     }
-    else if(ships1==NULL)
+    if(ships1==NULL)
     {
         player2->delta_score+=178;
         int nscore=178;
@@ -1461,12 +1482,21 @@ void play(player *player1,player *player2,int t)
             delete_ship(&ships2,ships2->id);
         }
         player1->delta_score+=nscore;
-        add_score(a,player1->delta_score/2);
-        fflush(stdin);    
-        add_score(b,player2->delta_score);
+        if(sw!=2)
+        {
+            add_score(a,player1->delta_score/2);
+        }
+        fflush(stdin);
+        if(sw!=2)
+        {
+            add_score(b,player2->delta_score);
+        }    
         fflush(stdin);
         system("cls");
-        printf("\t%s WON THE GAME !!!\n\n",player2->name);
+        if(sw!=2)
+        {
+            printf("\t%s WON THE GAME !!!\n\n",player2->name);
+        }
         system("pause");
         system("cls");
         system("cls");
@@ -1474,7 +1504,7 @@ void play(player *player1,player *player2,int t)
     }
 }
 
-bool turn_bot(player *player1,player *CPU,int t)
+int turn_bot(player *player1,player *CPU,int t)
 {
     fflush(stdin);
     bool sw=0;
@@ -1489,7 +1519,7 @@ bool turn_bot(player *player1,player *CPU,int t)
         int x,y;
         do
         {
-            printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game)\n");
+            printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game)\n(-3 -3 To Show Main Menu)\n");
             fflush(stdin);
             scanf("%d",&x);
             scanf("%d",&y);
@@ -1521,17 +1551,24 @@ bool turn_bot(player *player1,player *CPU,int t)
                 char c;
                 do
                 {
-                    printf("Do You Want Quit (y/n) / (Y/N) : ");
+                    printf("Do You Want To Exit The Game (y/n) / (Y/N) : ");
                     fflush(stdin);
                     scanf("%c",&c);
                     if(c=='Y' || c=='y')
                     {
                         system("pause");
-                        exit(0);
+                        system("cls");
+                        return 2;
                     }
                     fflush(stdin);
                 }while(c!='y' && c!='Y' && c!='n' && c!='N');
                 fflush(stdin);
+            }
+            else if(x==-3 && y==-3)
+            {
+                fflush(stdin);
+                system("cls");
+                return 2;
             }
             else if(x>=0 && x<10 && y>=0 && y<10)
             {
@@ -1679,10 +1716,11 @@ bool turn_bot(player *player1,player *CPU,int t)
 void play_bot(player *player1,player *CPU,int t)
 {
     fflush(stdin);
+    int sw;
     while(ships1!=NULL && ships2!=NULL)
     {
         fflush(stdin);
-        bool sw=turn_bot(player1,CPU,t);
+        sw=turn_bot(player1,CPU,t);
         fflush(stdin);
         if(sw==0)
         {
@@ -1695,6 +1733,10 @@ void play_bot(player *player1,player *CPU,int t)
                 t=1;
             }
         }
+        if(sw==2)
+        {
+            break;
+        }
     }
     int a=search_name(player1->name);
     fflush(stdin);
@@ -1705,16 +1747,22 @@ void play_bot(player *player1,player *CPU,int t)
         {   
             delete_ship(&ships1,ships1->id);
         }
-        add_score(a,player1->delta_score);
+        if(sw!=2)
+        {
+            add_score(a,player1->delta_score);
+        }
         fflush(stdin);       
         system("cls");
-        printf("\t%s WON THE GAME !!!\n\n",player1->name);
+        if(sw!=2)
+        {
+            printf("\t%s WON THE GAME !!!\n\n",player1->name);
+        }
         system("pause");
         system("cls");
         system("cls");
         fflush(stdin);
     }
-    else if(ships1==NULL)
+    if(ships1==NULL)
     {
         int nscore=178;
         while(ships2!=NULL)
@@ -1739,10 +1787,16 @@ void play_bot(player *player1,player *CPU,int t)
             delete_ship(&ships2,ships2->id);
         }
         player1->delta_score+=nscore;
-        add_score(a,player1->delta_score/2);
+        if(sw!=2)
+        {
+            add_score(a,player1->delta_score/2);
+        }
         fflush(stdin);   
         system("cls");
-        printf("\t%s WON THE GAME !!!\n\n",CPU->name);
+        if(sw!=2)
+        {
+            printf("\t%s WON THE GAME !!!\n\n",CPU->name);
+        }
         system("pause");
         system("cls");
         system("cls");
@@ -2317,6 +2371,7 @@ void show_mainmenu()
         }
         else if(x==7)
         {
+            system("cls");
             exit(0);
         }
         else
