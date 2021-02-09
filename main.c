@@ -1,8 +1,13 @@
+//***************************************************
 //               In The Name Of God
 //                   BattleShips
 //    Fundamentals Of Programming Final Project
 //             Created By Farhad Aman
 //                   Winter 2021
+//***************************************************
+
+//                   Preprocessor
+//***************************************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -19,6 +24,12 @@
 #include <unistd.h>
 #endif
 
+#define max_name_size 50
+#define map_size 10
+//***************************************************
+
+//                      Struct
+//***************************************************
 typedef long long ll;
 
 typedef enum
@@ -37,8 +48,6 @@ const ll inf=1000000000000000000L;
 const double eps=1e-7;
 const double pi=3.14159265359;
 
-#define max_name_size 50
-#define map_size 10
 int user_count=0;
 
 typedef HANDLE Handle;
@@ -102,7 +111,10 @@ struct save_info
     int type;
 };
 typedef struct save_info save_info;
+//***************************************************
 
+//                       Game Saves
+//***************************************************
 bool save_game(save_info info)
 {
     FILE *fin=fopen("Resources\\saves.bin","rb");
@@ -190,7 +202,10 @@ void print_saves()
     }
     fclose(fin);
 }
+//***************************************************
 
+//                     Linked List
+//***************************************************
 void add_end(ship **pships,int id,int x1,int x2,int y1,int y2,int sz,int cur)
 {
     ship *new_ship=(ship*)malloc(sizeof(ship));
@@ -249,7 +264,10 @@ void print_ships(ship *ships)
         printf("%d (%d,%d) , (%d,%d) , (%d/%d)\n",current->id,current->x1,current->y1,current->x2,current->y2,current->sz,current->cur);
     }
 }
+//***************************************************
 
+//                    User Settings
+//***************************************************
 void create_settings()
 {
     FILE *fout=fopen("Resources\\settings.bin","wb");
@@ -269,7 +287,10 @@ void load_settings()
     fread(&user_count,sizeof(int),1,fin);
     fclose(fin);
 }
+//***************************************************
 
+//                      Show Map
+//***************************************************
 void show_visible_map(player *vis_player)
 {
     printf("\n  ");
@@ -369,9 +390,11 @@ void show_hidden_map(player *vis_player)
         }
     }
 }
+//***************************************************
 
-//Username Functions
 
+//                 Username Functions
+//***************************************************
 int search_name(char *name)
 {
     FILE *fin=fopen("Resources\\usernames.bin","rb");
@@ -535,9 +558,11 @@ void get_name(player *vis_player)
         }
     }while(1);
 }
+//***************************************************
 
-// Game Play Functions
 
+//              Gameplay Functions
+//***************************************************
 void init_map(player *vis_player)
 {
     for(int i=0;i<10;i++)
@@ -1807,9 +1832,10 @@ void play_bot(player *player1,player *CPU,int t)
         fflush(stdin);
     }
 }
+//***************************************************
 
-// Menu Functions
-
+//                  Menu Functions
+//***************************************************
 void play_with_friend()
 {
     fflush(stdin);
@@ -2387,7 +2413,7 @@ void show_mainmenu()
 
     } while (x!=7);
 }
-
+//***************************************************
 
 int main()
 {
