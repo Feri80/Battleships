@@ -1613,22 +1613,22 @@ bool turn_bot(player *player1,player *CPU,int t)
             }
             else if(star_cnt>1)
             {
-                if(x-1>=0 && op_player->visible_map[x-1][y]=='*')
+                if(x-2>=0 && op_player->visible_map[x-1][y]=='*' && op_player->visible_map[x-2][y]=='*')
                 {
                     fflush(stdin);
                     break;
                 }
-                if(x+1<10 && op_player->visible_map[x+1][y]=='*')
+                if(x+2<10 && op_player->visible_map[x+1][y]=='*' && op_player->visible_map[x+2][y]=='*')
                 {
                     fflush(stdin);
                     break;
                 }
-                if(y-1>=0 && op_player->visible_map[x][y-1]=='*')
+                if(y-2>=0 && op_player->visible_map[x][y-1]=='*' && op_player->visible_map[x][y-2]=='*')
                 {
                     fflush(stdin);
                     break;
                 }
-                if(y+1<10 && op_player->visible_map[x][y+1]=='*')
+                if(y+2<10 && op_player->visible_map[x][y+1]=='*' && op_player->visible_map[x][y+2]=='*')
                 {
                     fflush(stdin);
                     break;
