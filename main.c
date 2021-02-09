@@ -1561,8 +1561,85 @@ bool turn_bot(player *player1,player *CPU,int t)
     }
     else if(t==2)
     {
-        
+        op_player=player1;
+        fflush(stdin);
+        int x,y;
+        int star_cnt=0;
+        for(int i=0;i<10;i++)
+        {
+            for(int j=0;j<10;j++)
+            {
+                if(op_player->visible_map[i][j]=='*')
+                {
+                    star_cnt++;
+                }
+            }
+        }
+        while(1)
+        {
+            x=rand()%10;
+            y=rand()%10;
+            if(op_player->visible_map[x][y]!=' ')
+            {
+                fflush(stdin);
+                continue;
+            }
+            if(star_cnt)
+            {
+                if(x-1>=0 && op_player->visible_map[x-1][y]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                if(x+1<10 && op_player->visible_map[x+1][y]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                if(y-1>=0 && op_player->visible_map[x][y-1]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                if(y+1<10 && op_player->visible_map[x][y+1]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                fflush(stdin);
+                continue;
+            }
+            else
+            {
+                fflush(stdin);
+                break;
+            }
+        }
+        if(op_player->hidden_map[x][y]<0)
+        {
+            op_player->visible_map[x][y]='W';
+        }
+        else
+        {
+            op_player->visible_map[x][y]='*';
+            sw=1;
+            fflush(stdin);
+            update_list(op_player,x,y,t);
+            fflush(stdin);
+        }
     }
+    fflush(stdin);
+    Sleep(1000);
+    system("cls");
+    system("cls");
+    printf("This Is %s Map After Your Turn \n",op_player->name);
+    show_visible_map(op_player);
+    printf("\n");
+    system("pause");
+    system("cls");
+    system("cls");
+    fflush(stdin);
+    return sw;
 }
 
 void play_bot(player *player1,player *CPU,int t)
@@ -2212,5 +2289,6 @@ void show_mainmenu()
 int main()
 {
     load_settings();
+    srand(time(NULL));
     show_mainmenu();
 }
