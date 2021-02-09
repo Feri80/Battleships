@@ -1294,7 +1294,8 @@ bool turn(player *player1,player *player2,int t)
         fflush(stdin);
         if(x==-1 && y==-1)
         {
-            break;
+            fflush(stdin);
+            continue;
         }
         else if(x==-2 && y==-2)
         {
@@ -1473,7 +1474,95 @@ void play(player *player1,player *player2,int t)
 
 bool turn_bot(player *player1,player *CPU,int t)
 {
-
+    fflush(stdin);
+    bool sw=0;
+    player *op_player;
+    
+    if(t==1)
+    {
+        printf("%s This Is Your Turn \n",player1->name);
+        op_player=CPU;
+        show_visible_map(CPU);
+        fflush(stdin);
+        int x,y;
+        do
+        {
+            printf("\nPlaese Enter Your Target Coordinates : \n(-1 -1 To Use ROCKET Needs 100 Scores)\n(-2 -2 To Save Your Game)\n");
+            fflush(stdin);
+            scanf("%d",&x);
+            scanf("%d",&y);
+            fflush(stdin);
+            if(x==-1 && y==-1)
+            {
+                fflush(stdin);
+                continue;
+            }
+            else if(x==-2 && y==-2)
+            {
+                fflush(stdin);
+                save_info info;
+                info.t=t;
+                info.type=1;
+                info.player1=*player1;
+                info.player2=*CPU;
+                char temp[max_name_size];
+                do
+                {
+                    printf("Please Enter A Name For Your Save : ");
+                    fflush(stdin);
+                    scanf("%s",&temp);
+                    strcpy(info.name,temp);
+                    fflush(stdin);
+                }while(save_game(info)==0);
+                printf("The Game Successfully Saved\n");
+                fflush(stdin);
+                char c;
+                do
+                {
+                    printf("Do You Want Quit (y/n) / (Y/N) : ");
+                    fflush(stdin);
+                    scanf("%c",&c);
+                    if(c=='Y' || c=='y')
+                    {
+                        system("pause");
+                        exit(0);
+                    }
+                    fflush(stdin);
+                }while(c!='y' && c!='Y' && c!='n' && c!='N');
+                fflush(stdin);
+            }
+            else if(x>=0 && x<10 && y>=0 && y<10)
+            {
+                if(check_valid_target(op_player,x,y)==0)
+                {
+                    fflush(stdin);
+                    continue;
+                }
+                if(op_player->hidden_map[x][y]<0)
+                {
+                    op_player->visible_map[x][y]='W';
+                }
+                else
+                {
+                    op_player->visible_map[x][y]='*';
+                    sw=1;
+                    fflush(stdin);
+                    update_list(op_player,x,y,t);
+                    fflush(stdin);
+                }
+                break;
+            }
+            else
+            {
+                fflush(stdin);
+                continue;
+            }
+        }while(1);
+    }
+    else if(t==2)
+    {
+        
+    }
 }
 
 void play_bot(player *player1,player *CPU,int t)
