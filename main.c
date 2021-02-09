@@ -370,6 +370,8 @@ void show_hidden_map(player *vis_player)
     }
 }
 
+//Username Functions
+
 int search_name(char *name)
 {
     FILE *fin=fopen("Resources\\usernames.bin","rb");
@@ -391,35 +393,6 @@ int search_name(char *name)
     }
     fclose(fin);
     return -1;
-}
-
-int scoreboard_cmp(const void *a,const void *b)
-{
-    return ((*(username*)b).score - (*(username*)a).score);
-}
-void show_scoreboard()
-{
-    FILE *fin=fopen("Resources\\usernames.bin","rb");
-    if(fin==NULL)
-    {
-        printf("Missing File Resources\\usernames.bin \n");
-        system("pause");
-        exit(0);
-    }
-    fseek(fin,sizeof(username),SEEK_SET);
-    username users[user_count-1];
-    for(int i=0;i<user_count-1;i++)
-    {
-        fread(&users[i],sizeof(username),1,fin);
-    }
-    qsort(users,user_count-1,sizeof(username),scoreboard_cmp);
-    printf("\n\t\t\t\tSCORE BOARD\n--------------------------------------------------------------------------------\n");
-    for(int i=0;i<user_count-1;i++)
-    {
-        printf("%d) %-50s\t\tScore : %d \n--------------------------------------------------------------------------------\n",i+1,users[i].name,users[i].score);
-    }
-    system("pause");
-    system("cls");
 }
 
 void show_names()
@@ -499,6 +472,7 @@ void use_existing_name(player *vis_player)
     strcpy(vis_player->name,new_username.name);
     vis_player->score=new_username.score;
     vis_player->delta_score=0;
+    vis_player->is_special=0;
     fclose(fin);
 }
 
@@ -514,6 +488,7 @@ int use_new_name(player *vis_player)
         strcpy(vis_player->name,new_name);
         vis_player->score=0;
         vis_player->delta_score=0;
+        vis_player->is_special=0;
         fflush(stdin);
 
         return 1;
@@ -560,6 +535,8 @@ void get_name(player *vis_player)
         }
     }while(1);
 }
+
+// Game Play Functions
 
 void init_map(player *vis_player)
 {
@@ -703,11 +680,6 @@ void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
             }
         }
     }
-}
-
-int make_random_map(player *vis_player)
-{
-    return 0;
 }
 
 bool make_map(player *vis_player)
@@ -1035,38 +1007,13 @@ bool make_map(player *vis_player)
 void get_map(player *vis_player)
 {
     fflush(stdin);
-    int x;
-    do
+    while(make_map(vis_player)==0)
     {
-        printf("1) Make Your Own Map \n2) Choose A Random Map \n");
+
+        system("cls");
         fflush(stdin);
-        scanf("%d",&x);
-        if(x==1)
-        {
-            fflush(stdin);
-            while(make_map(vis_player)==0)
-            {
-                system("cls");
-                fflush(stdin);
-            }
-            fflush(stdin);
-        }
-        else if(x==2)
-        {
-            fflush(stdin);
-            while(make_random_map(vis_player)==0)
-            {
-                system("cls");
-                fflush(stdin);
-            }
-            fflush(stdin);
-        }
-        else
-        {
-            fflush(stdin);
-            continue;
-        }
-    }while(x<1 || x>2);
+    }
+    fflush(stdin);
     system("cls");
     fflush(stdin);
     printf("Your Map Successfully Created \n");
@@ -1524,6 +1471,8 @@ void play(player *player1,player *player2,int t)
     }
 }
 
+// Menu Functions
+
 void play_with_friend()
 {
     fflush(stdin);
@@ -1549,6 +1498,123 @@ void player_with_cpu()
 {
     fflush(stdin);
     player player1;
+    player CPU;
+
+    init_player(&player1,1,"a");
+    fflush(stdin);
+    make_lists(1);
+
+    fflush(stdin);
+    strcpy(CPU.name,"CPU");
+    CPU.score=0;
+    CPU.delta_score=0;
+    CPU.is_special=0;
+
+    init_map(&CPU);
+    
+    //Ship 0
+    put_selected_ship(&CPU,0,1,1,1,5);
+    total_ships[0].x1=1;
+    total_ships[0].x2=1;
+    total_ships[0].y1=1;
+    total_ships[0].y2=5;
+    total_ships[0].id=0;
+    total_ships[0].sz=5;
+    total_ships[0].cur=5;
+    total_ships[0].next=NULL;
+    //Ship 1
+    put_selected_ship(&CPU,1,6,8,8,8);
+    total_ships[1].x1=6;
+    total_ships[1].x2=8;
+    total_ships[1].y1=8;
+    total_ships[1].y2=8;
+    total_ships[1].id=1;
+    total_ships[1].sz=3;
+    total_ships[1].cur=3;
+    total_ships[1].next=NULL;
+    //Ship 2
+    put_selected_ship(&CPU,2,5,5,2,4);
+    total_ships[2].x1=5;
+    total_ships[2].x2=5;
+    total_ships[2].y1=2;
+    total_ships[2].y2=4;
+    total_ships[2].id=2;
+    total_ships[2].sz=3;
+    total_ships[2].cur=3;
+    total_ships[2].next=NULL;
+    //Ship 3
+    put_selected_ship(&CPU,3,9,9,1,2);
+    total_ships[3].x1=9;
+    total_ships[3].x2=9;
+    total_ships[3].y1=1;
+    total_ships[3].y2=2;
+    total_ships[3].id=3;
+    total_ships[3].sz=2;
+    total_ships[3].cur=2;
+    total_ships[3].next=NULL;
+    //Ship 4
+    put_selected_ship(&CPU,4,5,6,0,0);
+    total_ships[4].x1=5;
+    total_ships[4].x2=6;
+    total_ships[4].y1=0;
+    total_ships[4].y2=0;
+    total_ships[4].id=4;
+    total_ships[4].sz=2;
+    total_ships[4].cur=2;
+    total_ships[4].next=NULL;
+    //Ship 5
+    put_selected_ship(&CPU,5,2,2,8,9);
+    total_ships[5].x1=2;
+    total_ships[5].x2=2;
+    total_ships[5].y1=8;
+    total_ships[5].y2=9;
+    total_ships[5].id=5;
+    total_ships[5].sz=2;
+    total_ships[5].cur=2;
+    total_ships[5].next=NULL;
+    //Ship 6
+    put_selected_ship(&CPU,6,0,0,8,8);
+    total_ships[6].x1=0;
+    total_ships[6].x2=0;
+    total_ships[6].y1=8;
+    total_ships[6].y2=8;
+    total_ships[6].id=6;
+    total_ships[6].sz=1;
+    total_ships[6].cur=1;
+    total_ships[6].next=NULL;
+    //Ship 7
+    put_selected_ship(&CPU,7,3,3,2,2);
+    total_ships[7].x1=3;
+    total_ships[7].x2=3;
+    total_ships[7].y1=2;
+    total_ships[7].y2=2;
+    total_ships[7].id=7;
+    total_ships[7].sz=1;
+    total_ships[7].cur=1;
+    total_ships[7].next=NULL;
+    //Ship 8
+    put_selected_ship(&CPU,8,8,8,5,5);
+    total_ships[8].x1=8;
+    total_ships[8].x2=8;
+    total_ships[8].y1=5;
+    total_ships[8].y2=5;
+    total_ships[8].id=8;
+    total_ships[8].sz=1;
+    total_ships[8].cur=1;
+    total_ships[8].next=NULL;
+    //Ship 9
+    put_selected_ship(&CPU,9,4,4,6,6);
+    total_ships[9].x1=4;
+    total_ships[9].x2=4;
+    total_ships[9].y1=6;
+    total_ships[9].y2=6;
+    total_ships[9].id=9;
+    total_ships[9].sz=1;
+    total_ships[9].cur=1;
+    total_ships[9].next=NULL;
+
+    fflush(stdin);
+    make_lists(2);
     fflush(stdin);
 }
 
@@ -1883,6 +1949,35 @@ void load_last_game()
     }
 }
 
+void show_scoreboard()
+{
+    FILE *fin=fopen("Resources\\usernames.bin","rb");
+    if(fin==NULL)
+    {
+        printf("Missing File Resources\\usernames.bin \n");
+        system("pause");
+        exit(0);
+    }
+    fseek(fin,sizeof(username),SEEK_SET);
+    username users[user_count-1];
+    for(int i=0;i<user_count-1;i++)
+    {
+        fread(&users[i],sizeof(username),1,fin);
+    }
+    qsort(users,user_count-1,sizeof(username),scoreboard_cmp);
+    printf("\n\t\t\t\tSCORE BOARD\n--------------------------------------------------------------------------------\n");
+    for(int i=0;i<user_count-1;i++)
+    {
+        printf("%d) %-50s\t\tScore : %d \n--------------------------------------------------------------------------------\n",i+1,users[i].name,users[i].score);
+    }
+    system("pause");
+    system("cls");
+}
+
+int scoreboard_cmp(const void *a,const void *b)
+{
+    return ((*(username*)b).score - (*(username*)a).score);
+}
 
 void show_mainmenu()
 {
