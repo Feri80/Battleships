@@ -1586,7 +1586,32 @@ bool turn_bot(player *player1,player *CPU,int t)
                 fflush(stdin);
                 continue;
             }
-            if(star_cnt)
+            if(star_cnt==1)
+            {
+                if(x-1>=0 && op_player->visible_map[x-1][y]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                if(x+1<10 && op_player->visible_map[x+1][y]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                if(y-1>=0 && op_player->visible_map[x][y-1]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                if(y+1<10 && op_player->visible_map[x][y+1]=='*')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                fflush(stdin);
+                continue;
+            }
+            else if(star_cnt>1)
             {
                 if(x-1>=0 && op_player->visible_map[x-1][y]=='*')
                 {
@@ -1634,7 +1659,14 @@ bool turn_bot(player *player1,player *CPU,int t)
     Sleep(1000);
     system("cls");
     system("cls");
-    printf("This Is %s Map After Your Turn \n",op_player->name);
+    if(t==1)
+    {
+        printf("This Is CPUs Map After Your Turn \n");
+    }
+    else
+    {
+        printf("This Is Your Map After CPUs Turn \n");
+    }
     show_visible_map(op_player);
     printf("\n");
     system("pause");
