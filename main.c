@@ -1739,7 +1739,7 @@ void play_with_friend()
     fflush(stdin);
 }
 
-void player_with_cpu()
+void play_with_cpu()
 {
     fflush(stdin);
     player player1;
@@ -2025,6 +2025,10 @@ void load_all_games()
     {
         play(&player1,&player2,info.t);
     }
+    else if(info.type==1)
+    {
+        play_bot(&player1,&player2,info.t);
+    }
 }
 
 void load_last_game()
@@ -2195,6 +2199,10 @@ void load_last_game()
     {
         play(&player1,&player2,info.t);
     }
+    else if(info.type==1)
+    {
+        play_bot(&player1,&player2,info.t);
+    }
 }
 
 void show_scoreboard()
@@ -2247,7 +2255,9 @@ void show_mainmenu()
         }   
         else if(x==2)
         {
-
+            fflush(stdin);
+            play_with_cpu();
+            fflush(stdin);
         }
         else if(x==3)
         {
