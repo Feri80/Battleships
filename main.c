@@ -1021,6 +1021,10 @@ void get_map(player *vis_player)
     printf("Your Map Successfully Created \n");
     system("pause");
     system("cls");
+    system("cls");
+    system("cls");
+    system("cls");
+    system("cls");
     fflush(stdin);
 }
 
@@ -1410,7 +1414,7 @@ void play(player *player1,player *player2,int t)
     fflush(stdin);
     int b=search_name(player2->name);
     fflush(stdin);
-    if(ships2==NULL)
+    if(ships1!=NULL)
     {
         player1->delta_score+=178;
         int nscore=178;
@@ -1456,7 +1460,7 @@ void play(player *player1,player *player2,int t)
         system("cls");
         fflush(stdin);
     }
-    if(ships1==NULL)
+    if(ships2!=NULL)
     {
         player2->delta_score+=178;
         int nscore=178;
@@ -1740,7 +1744,7 @@ void play_bot(player *player1,player *CPU,int t)
     }
     int a=search_name(player1->name);
     fflush(stdin);
-    if(ships2==NULL)
+    if(ships1!=NULL)
     {
         player1->delta_score+=178;
         while(ships1!=NULL)
@@ -1762,7 +1766,7 @@ void play_bot(player *player1,player *CPU,int t)
         system("cls");
         fflush(stdin);
     }
-    if(ships1==NULL)
+    if(ships2!=NULL)
     {
         int nscore=178;
         while(ships2!=NULL)
