@@ -592,6 +592,7 @@ bool check_valid_map(player *vis_player,int sz,int x1,int x2,int y1,int y2)
     {
         return 0;
     }
+    return 0;
 }
 
 void put_selected_ship(player *vis_player,int id,int x1,int x2,int y1,int y2)
@@ -1002,6 +1003,7 @@ bool make_map(player *vis_player)
             continue;
         }
     }while(c!='Y' && c!='N' && c!='y' && c!='n');
+    return 0;
 }
 
 void get_map(player *vis_player)
@@ -1708,7 +1710,7 @@ void play_bot(player *player1,player *CPU,int t)
         add_score(a,player1->delta_score/2);
         fflush(stdin);   
         system("cls");
-        printf("\t%s WON THE GAME !!!\n\n",player2->name);
+        printf("\t%s WON THE GAME !!!\n\n",CPU->name);
         system("pause");
         system("cls");
         system("cls");
@@ -2205,6 +2207,11 @@ void load_last_game()
     }
 }
 
+int scoreboard_cmp(const void *a,const void *b)
+{
+    return ((*(username*)b).score - (*(username*)a).score);
+}
+
 void show_scoreboard()
 {
     FILE *fin=fopen("Resources\\usernames.bin","rb");
@@ -2228,11 +2235,6 @@ void show_scoreboard()
     }
     system("pause");
     system("cls");
-}
-
-int scoreboard_cmp(const void *a,const void *b)
-{
-    return ((*(username*)b).score - (*(username*)a).score);
 }
 
 void show_mainmenu()
