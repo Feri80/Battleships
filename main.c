@@ -893,12 +893,12 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your First Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
+        printf("\nPlaese Enter Your First Size 1 Ship Coordinates (Like)  x1 y1 : \n (If You Want To Reset Map Enter -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
-        scanf("%d",&x2);
-        scanf("%d",&y2);
+        x2=x1;
+        y2=y1;
         if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
         {
             return 0;
@@ -922,12 +922,12 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Second Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
+        printf("\nPlaese Enter Your Second Size 1 Ship Coordinates (Like)  x1 y1 : \n (If You Want To Reset Map Enter -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
-        scanf("%d",&x2);
-        scanf("%d",&y2);
+        x2=x1;
+        y2=y1;
         if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
         {
             return 0;
@@ -951,12 +951,12 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Third Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
+        printf("\nPlaese Enter Your Third Size 1 Ship Coordinates (Like)  x1 y1 : \n (If You Want To Reset Map Enter -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
-        scanf("%d",&x2);
-        scanf("%d",&y2);
+        x2=x1;
+        y2=y1;
         if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
         {
             return 0;
@@ -980,12 +980,12 @@ bool make_map(player *vis_player)
     id++;
     do
     {
-        printf("\nPlaese Enter Your Fourth Size 1 Ship Coordinates (Like)  x1 y1 x2 y2 : \n (If You Want To Reset Map Enter -1 -1 -1 -1) \n");
+        printf("\nPlaese Enter Your Fourth Size 1 Ship Coordinates (Like)  x1 y1 : \n (If You Want To Reset Map Enter -1 -1) \n");
         fflush(stdin);
         scanf("%d",&x1);
         scanf("%d",&y1);
-        scanf("%d",&x2);
-        scanf("%d",&y2);
+        x2=x1;
+        y2=y1;
         if(x1==-1 && x2==-1 && y1==-1 && y2==-1)
         {
             return 0;
@@ -1348,21 +1348,21 @@ int turn(player *player1,player *player2,int t)
             {
                 do
                 {
-                    printf("Pleasr Enter The Rocket Way (H/V) / (h/v) : ");
+                    printf("Please Enter The Rocket Way (H/V) / (h/v) : ");
                     fflush(stdin);
                     scanf("%c",&w);
                     fflush(stdin);
                 }while(w!='H' && w!='V' && w!='h' && w!='v');
                 do
                 {
-                    printf("Pleasr Enter The Rocket Row/Column (0-9) : ");
+                    printf("Please Enter The Rocket Row/Column (0-9) : ");
                     fflush(stdin);
                     scanf("%d",&r);
                     fflush(stdin);
                 }while(r<0 || r>9);
                 do
                 {
-                    printf("%c %d Re Your Sure (Y/N) / (y/n) : ",w,r);
+                    printf("%c %d Are Your Sure (Y/N) / (y/n) : ",w,r);
                     fflush(stdin);
                     scanf("%c",&c);
                     fflush(stdin);
@@ -1686,21 +1686,21 @@ int turn_bot(player *player1,player *CPU,int t)
                 {
                     do
                     {
-                        printf("Pleasr Enter The Rocket Way (H/V) / (h/v) : ");
+                        printf("Please Enter The Rocket Way (H/V) / (h/v) : ");
                         fflush(stdin);
                         scanf("%c",&w);
                         fflush(stdin);
                     }while(w!='H' && w!='V' && w!='h' && w!='v');
                     do
                     {
-                        printf("Pleasr Enter The Rocket Row/Column (0-9) : ");
+                        printf("Please Enter The Rocket Row/Column (0-9) : ");
                         fflush(stdin);
                         scanf("%d",&r);
                         fflush(stdin);
                     }while(r<0 || r>9);
                     do
                     {
-                        printf("%c %d Re Your Sure (Y/N) / (y/n) : ",w,r);
+                        printf("%c %d Are Your Sure (Y/N) / (y/n) : ",w,r);
                         fflush(stdin);
                         scanf("%c",&c);
                         fflush(stdin);
