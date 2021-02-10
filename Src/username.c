@@ -141,6 +141,11 @@ void get_name(player *vis_player)
         if(x==1)
         {
             fflush(stdin);
+            if(user_count==1)
+            {
+                fflush(stdin);
+                continue;
+            }
             use_existing_name(vis_player);
             fflush(stdin);
             break;
