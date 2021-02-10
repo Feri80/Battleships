@@ -1362,7 +1362,7 @@ int turn(player *player1,player *player2,int t)
                 }while(r<0 || r>9);
                 do
                 {
-                    printf("%c %d Re Your Sure (Y/N) / (y/n) : ");
+                    printf("%c %d Re Your Sure (Y/N) / (y/n) : ",w,r);
                     fflush(stdin);
                     scanf("%c",&c);
                     fflush(stdin);
@@ -1395,7 +1395,7 @@ int turn(player *player1,player *player2,int t)
                     {
                         op_player->visible_map[r][i]='W';
                     }
-                    else
+                    else if(op_player->visible_map[r][i]==' ')
                     {
                         op_player->visible_map[r][i]='*';
                         sw=1;
@@ -1414,7 +1414,7 @@ int turn(player *player1,player *player2,int t)
                     {
                         op_player->visible_map[i][r]='W';
                     }
-                    else
+                    else if(op_player->visible_map[i][r]==' ')
                     {
                         op_player->visible_map[i][r]='*';
                         sw=1;
@@ -1690,7 +1690,7 @@ int turn_bot(player *player1,player *CPU,int t)
                     }while(r<0 || r>9);
                     do
                     {
-                        printf("%c %d Re Your Sure (Y/N) / (y/n) : ");
+                        printf("%c %d Re Your Sure (Y/N) / (y/n) : ",w,r);
                         fflush(stdin);
                         scanf("%c",&c);
                         fflush(stdin);
@@ -1723,7 +1723,7 @@ int turn_bot(player *player1,player *CPU,int t)
                         {
                             op_player->visible_map[r][i]='W';
                         }
-                        else
+                        else if(op_player->visible_map[r][i]==' ')
                         {
                             op_player->visible_map[r][i]='*';
                             sw=1;
@@ -1742,7 +1742,7 @@ int turn_bot(player *player1,player *CPU,int t)
                         {
                             op_player->visible_map[i][r]='W';
                         }
-                        else
+                        else if(op_player->visible_map[i][r]==' ')
                         {
                             op_player->visible_map[i][r]='*';
                             sw=1;
