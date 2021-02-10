@@ -2542,11 +2542,18 @@ void show_scoreboard()
         fread(&users[i],sizeof(username),1,fin);
     }
     qsort(users,user_count-1,sizeof(username),scoreboard_cmp);
-    printf("\n\t\t\t\tSCORE BOARD\n--------------------------------------------------------------------------------\n");
+    setTextColor(GREEN);
+    printf("\n\t\t\t\tSCORE BOARD");
+    setTextColor(PURPLE);
+    printf("\n--------------------------------------------------------------------------------\n");
     for(int i=0;i<user_count-1;i++)
     {
-        printf("%d) %-50s\t\tScore : %d \n--------------------------------------------------------------------------------\n",i+1,users[i].name,users[i].score);
+        setTextColor(GREEN);
+        printf("%d) %-50s\t\tScore : %d ",i+1,users[i].name,users[i].score);
+        setTextColor(PURPLE);
+        printf("\n--------------------------------------------------------------------------------\n");
     }
+    setTextColor(WHITE);
     system("pause");
     system("cls");
 }
@@ -2559,6 +2566,7 @@ void show_mainmenu()
     int x;
     do
     {
+        setTextColor(GREEN);
         printf("\n\t\tMAIN MENU\n-----------------------------------------\n");
         printf("1) Play With A Friend \n2) Play With CPU \n3) Load Game \n4) Load Last Game \n5) Score Board \n6) Exit \n");
         fflush(stdin);
