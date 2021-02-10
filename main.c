@@ -1502,6 +1502,16 @@ int turn(player *player1,player *player2,int t)
     system("cls");
     printf("This Is %s Map After Your Turn \n",op_player->name);
     show_visible_map(op_player);
+    if(sw==0)
+    {
+        Sleep(200);
+        Beep(250,500);
+    }
+    else
+    {
+        Sleep(200);
+        Beep(600,500);
+    }
     printf("\n");
     system("pause");
     system("cls");
@@ -1932,6 +1942,16 @@ int turn_bot(player *player1,player *CPU,int t)
         printf("This Is Your Map After CPUs Turn \n");
     }
     show_visible_map(op_player);
+    if(sw==0)
+    {
+        Sleep(200);
+        Beep(250,400);
+    }
+    else
+    {
+        Sleep(200);
+        Beep(600,400);
+    }
     printf("\n");
     system("pause");
     system("cls");
