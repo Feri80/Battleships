@@ -1301,10 +1301,12 @@ int turn(player *player1,player *player2,int t)
     fflush(stdin);
     bool sw=0;
     player *op_player;
+    player *vis_player;
     if(t==1)
     {
         printf("%s This Is Your Turn \n",player1->name);
         op_player=player2;
+        vis_player=player1;
         show_visible_map(player2);
         fflush(stdin);
     }
@@ -1312,6 +1314,7 @@ int turn(player *player1,player *player2,int t)
     {
         printf("%s This Is Your Turn \n",player2->name);
         op_player=player1;
+        vis_player=player2;
         show_visible_map(player1);
         fflush(stdin);
     }
@@ -1325,8 +1328,105 @@ int turn(player *player1,player *player2,int t)
         fflush(stdin);
         if(x==-1 && y==-1)
         {
+            if(vis_player->score<100)
+            {
+                printf("You Do Not Have Enough Scores\n");
+                fflush(stdin);
+                continue;
+            }
+            if(vis_player->is_special==1)
+            {
+                printf("You Have Already Used Your Rocket\n");
+                fflush(stdin);
+                continue;
+            }
+            char w;
+            int r;
+            char c;
             fflush(stdin);
-            continue;
+            do
+            {
+                do
+                {
+                    printf("Pleasr Enter The Rocket Way (H/V) / (h/v) : ");
+                    fflush(stdin);
+                    scanf("%c",&w);
+                    fflush(stdin);
+                }while(w!='H' && w!='V' && w!='h' && w!='v');
+                do
+                {
+                    printf("Pleasr Enter The Rocket Row/Column (0-9) : ");
+                    fflush(stdin);
+                    scanf("%d",&r);
+                    fflush(stdin);
+                }while(r<0 || r>9);
+                do
+                {
+                    printf("%c %d Re Your Sure (Y/N) / (y/n) : ");
+                    fflush(stdin);
+                    scanf("%c",&c);
+                    fflush(stdin);
+                }while(c!='Y' && c!='N' && c!='y' && c!='N');
+                
+                if(c=='Y' || c=='y')
+                {
+                    fflush(stdin);
+                    break;
+                }
+                else if(c=='N' || c=='n')
+                {
+                    fflush(stdin);
+                    continue;
+                }
+                else
+                {
+                    fflush(stdin);
+                    continue;
+                }
+            }while(1);
+            fflush(stdin);
+            vis_player->delta_score-=100;
+            vis_player->is_special=1;
+            if(w=='H' || w=='h')
+            {
+                for(int i=0;i<10;i++)
+                {
+                    if(op_player->hidden_map[r][i]<0)
+                    {
+                        op_player->visible_map[r][i]='W';
+                    }
+                    else
+                    {
+                        op_player->visible_map[r][i]='*';
+                        sw=1;
+                        fflush(stdin);
+                        update_list(op_player,r,i,t);
+                        fflush(stdin);
+                        break;
+                    }
+                }
+            }
+            else if(w=='V' || w=='v')
+            {
+                for(int i=0;i<10;i++)
+                {
+                    if(op_player->hidden_map[i][r]<0)
+                    {
+                        op_player->visible_map[i][r]='W';
+                    }
+                    else
+                    {
+                        op_player->visible_map[i][r]='*';
+                        sw=1;
+                        fflush(stdin);
+                        update_list(op_player,i,r,t);
+                        fflush(stdin);
+                        break;
+                    }
+                }
+            }
+            fflush(stdin);
+            break;
         }
         else if(x==-2 && y==-2)
         {
@@ -1538,11 +1638,12 @@ int turn_bot(player *player1,player *CPU,int t)
     fflush(stdin);
     bool sw=0;
     player *op_player;
-    
+    player *vis_player;
     if(t==1)
     {
         printf("%s This Is Your Turn \n",player1->name);
         op_player=CPU;
+        vis_player=player1;
         show_visible_map(CPU);
         fflush(stdin);
         int x,y;
@@ -1555,8 +1656,105 @@ int turn_bot(player *player1,player *CPU,int t)
             fflush(stdin);
             if(x==-1 && y==-1)
             {
+                if(vis_player->score<100)
+                {
+                    printf("You Do Not Have Enough Scores\n");
+                    fflush(stdin);
+                    continue;
+                }
+                if(vis_player->is_special==1)
+                {
+                    printf("You Have Already Used Your Rocket\n");
+                    fflush(stdin);
+                    continue;
+                }
+                char w;
+                int r;
+                char c;
                 fflush(stdin);
-                continue;
+                do
+                {
+                    do
+                    {
+                        printf("Pleasr Enter The Rocket Way (H/V) / (h/v) : ");
+                        fflush(stdin);
+                        scanf("%c",&w);
+                        fflush(stdin);
+                    }while(w!='H' && w!='V' && w!='h' && w!='v');
+                    do
+                    {
+                        printf("Pleasr Enter The Rocket Row/Column (0-9) : ");
+                        fflush(stdin);
+                        scanf("%d",&r);
+                        fflush(stdin);
+                    }while(r<0 || r>9);
+                    do
+                    {
+                        printf("%c %d Re Your Sure (Y/N) / (y/n) : ");
+                        fflush(stdin);
+                        scanf("%c",&c);
+                        fflush(stdin);
+                    }while(c!='Y' && c!='N' && c!='y' && c!='N');
+                
+                    if(c=='Y' || c=='y')
+                    {
+                        fflush(stdin);
+                        break;
+                    }
+                    else if(c=='N' || c=='n')
+                    {
+                        fflush(stdin);
+                        continue;
+                    }
+                    else
+                    {
+                        fflush(stdin);
+                        continue;
+                    }
+                }while(1);
+                fflush(stdin);
+                vis_player->delta_score-=100;
+                vis_player->is_special=1;
+                if(w=='H' || w=='h')
+                {
+                    for(int i=0;i<10;i++)
+                    {
+                        if(op_player->hidden_map[r][i]<0)
+                        {
+                            op_player->visible_map[r][i]='W';
+                        }
+                        else
+                        {
+                            op_player->visible_map[r][i]='*';
+                            sw=1;
+                            fflush(stdin);
+                            update_list(op_player,r,i,t);
+                            fflush(stdin);
+                            break;
+                        }
+                    }
+                }
+                else if(w=='V' || w=='v')
+                {
+                    for(int i=0;i<10;i++)
+                    {
+                        if(op_player->hidden_map[i][r]<0)
+                        {
+                            op_player->visible_map[i][r]='W';
+                        }
+                        else
+                        {
+                            op_player->visible_map[i][r]='*';
+                            sw=1;
+                            fflush(stdin);
+                            update_list(op_player,i,r,t);
+                            fflush(stdin);
+                            break;
+                        }
+                    }
+                }
+                fflush(stdin);
+                break;
             }
             else if(x==-2 && y==-2)
             {
