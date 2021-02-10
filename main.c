@@ -2560,7 +2560,7 @@ void show_mainmenu()
     do
     {
         printf("\n\t\tMAIN MENU\n-----------------------------------------\n");
-        printf("1) Play With A Friend \n2) Play With CPU \n3) Load Game \n4) Load Last Game \n5) Play Back \n6) Score Board \n7) Exit \n");
+        printf("1) Play With A Friend \n2) Play With CPU \n3) Load Game \n4) Load Last Game \n5) Score Board \n6) Exit \n");
         fflush(stdin);
         scanf("%d",&x);
         if(x==1)
@@ -2590,14 +2590,10 @@ void show_mainmenu()
         else if(x==5)
         {
             fflush(stdin);
-        }
-        else if(x==6)
-        {
-            fflush(stdin);
             show_scoreboard();
             fflush(stdin);
         }
-        else if(x==7)
+        else if(x==6)
         {
             system("cls");
             exit(0);
@@ -2609,7 +2605,7 @@ void show_mainmenu()
             continue;
         }
 
-    } while (x!=7);
+    } while (x!=6);
 }
 //***************************************************
 
