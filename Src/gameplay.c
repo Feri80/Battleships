@@ -822,7 +822,6 @@ int turn(player *player1,player *player2,int t)
                 }
             }while(1);
             fflush(stdin);
-            vis_player->delta_score-=100;
             vis_player->is_special=1;
             if(w=='H' || w=='h')
             {
@@ -1015,11 +1014,19 @@ void play(player *player1,player *player2,int t)
         if(sw!=2)
         {
             add_score(a,player1->delta_score);
+            if(player1->is_special==1)
+            {
+               add_score(a,-100);
+            }
         }
         fflush(stdin);
         if(sw!=2)
         {
             add_score(b,player2->delta_score/2);
+            if(player2->is_special==1)
+            {
+               add_score(b,-100);
+            }
         }    
         fflush(stdin);        
         system("cls");
@@ -1061,11 +1068,19 @@ void play(player *player1,player *player2,int t)
         if(sw!=2)
         {
             add_score(a,player1->delta_score/2);
+            if(player1->is_special==1)
+            {
+               add_score(a,-100);
+            }
         }
         fflush(stdin);
         if(sw!=2)
         {
             add_score(b,player2->delta_score);
+            if(player2->is_special==1)
+            {
+               add_score(b,-100);
+            }
         }    
         fflush(stdin);
         system("cls");
@@ -1160,7 +1175,6 @@ int turn_bot(player *player1,player *CPU,int t)
                     }
                 }while(1);
                 fflush(stdin);
-                vis_player->delta_score-=100;
                 vis_player->is_special=1;
                 if(w=='H' || w=='h')
                 {
@@ -1434,6 +1448,10 @@ void play_bot(player *player1,player *CPU,int t)
         if(sw!=2)
         {
             add_score(a,player1->delta_score);
+            if(player1->is_special==1)
+            {
+                add_score(a,-100);
+            }
         }
         fflush(stdin);       
         system("cls");
@@ -1474,6 +1492,10 @@ void play_bot(player *player1,player *CPU,int t)
         if(sw!=2)
         {
             add_score(a,player1->delta_score/2);
+            if(player1->is_special==1)
+            {
+                add_score(a,-100);
+            }
         }
         fflush(stdin);   
         system("cls");
