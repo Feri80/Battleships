@@ -1,0 +1,2 @@
+Map Coordinates Is 0-Indexed
+Dont't Remove Or Move settings.bin & usernames.bin From Resources Folder
